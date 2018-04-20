@@ -1,0 +1,64 @@
+div.scroll-list {
+  overflow: auto;
+  max-height: 70vh;
+}
+
+.drag-over {
+  border: #ff525b dashed 2px;
+}
+
+.drag-hint {
+  border: #ffc100 dashed 2px;
+}
+
+.drag-target-border {
+  border: #00bfff dashed 2px;
+}
+
+.list-group-item {
+  margin:5px!important;
+}
+
+.ticket{
+
+  width: 16vw;
+  height: 15vw;
+  box-shadow: 3px 3px #888888;
+  border-radius: 7px;
+  float: right !important;
+  font-size: 1.5vw;
+  text-align: center!important;
+  background-size:cover;
+
+}
+
+.bgImage{
+  align-self:center;
+  opacity: 0.3;
+  width: 100%;
+  height: 100%;
+}
+
+.ticketInfo {
+  z-index: 9999!important;
+  text-align: center;
+  // font-size: 1.5vw;
+  }
+
+.blur {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: absolute;
+  top:0;
+  right:0;
+  width: 100%;
+}
+
+
+.drag-target-border-green {
+  border: #3c763d dashed 2px;
+}
+* {
+  direction: rtl!important;
+}

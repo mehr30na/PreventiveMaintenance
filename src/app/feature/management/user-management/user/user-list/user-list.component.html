@@ -1,0 +1,923 @@
+<nb-card *ngIf="mode!=='complete' &&mode==''">
+  <nb-card-header>
+    <div class="row">
+      <div class="col-md-4" style="text-align: right">
+        <button class="btn btn-hero-success" style="margin: 4px;" (click)="add()">ثبت کاربر جدید</button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">لیست کاربران</div>
+      <div class="col-md-4">
+
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <table class="table table-striped table-bordered table-hover ">
+      <thead>
+      <tr>
+        <th class="text-center">ردیف</th>
+        <th class="text-center">نام کاربری</th>
+        <th class="text-center">نام</th>
+        <th class="text-center">دسترسی</th>
+        <th class="text-center">پروفایل کاربر</th>
+        <th class="text-center">ویرایش</th>
+        <th class="text-center">حذف</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of userList;let i = index">
+        <td class="text-center">{{i+1}}</td>
+        <td class="text-center">{{item.userName}}</td>
+        <td class="text-center">{{item.name}}</td>
+        <td class="text-center">{{item.userType.role}}</td>
+        <td class="text-center">
+          <a routerLink="/management/userManagement/detail/{{item.id}}"
+             style="text-decoration: none">جزئیات</a>
+        </td>
+        <td class="text-center">
+          <a (click)="editUser(item.id)" style="cursor: pointer;color: green">
+            <i class="nb-edit"></i>
+          </a>
+        </td>
+        <td class="text-center">
+          <a class="btnRemove" (click)="deleteUser(item.id,i)" style="cursor: pointer;color: red">
+            <i class="nb-trash"></i>
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </nb-card-body>
+  <nb-card-footer>
+
+  </nb-card-footer>
+</nb-card>
+<!--<app-user-add [mode]="mode" [userId]="userId" [user]="user"></app-user-add>-->
+<nb-card *ngIf="mode=='complete' || mode=='add' || mode=='edit'">
+  <nb-card-header>
+    <div class="row" *ngIf="mode=='add'">
+      <div class="col-md-4" style="text-align: right">
+        <button class="btn btn-hero-danger" style="margin: 4px;" (click)="cancel()">
+          انصراف
+        </button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">اضافه کردن کاربر</div>
+      <div class="col-md-4 pull-left">
+
+      </div>
+    </div>
+    <div class="row" *ngIf="mode=='edit'">
+      <div class="col-md-4" style="text-align: right">
+        <button class="btn btn-hero-danger" style="margin: 4px;" (click)="cancel()">
+          انصراف
+        </button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">ویرایش اطلاعات کاربری</div>
+      <div class="col-md-4 pull-left">
+
+      </div>
+    </div>
+    <div class="row" *ngIf="mode=='complete'">
+      <div class="col-md-4" style="text-align: right">
+        <!--<button class="btn btn-hero-danger" style="margin: 4px;" (click)="cancel()">-->
+          <!--انصراف-->
+        <!--</button>-->
+      </div>
+      <div class="col-md-4" style="text-align: center;">تکمیل اطلاعات کاربری</div>
+      <div class="col-md-4 pull-left">
+
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div *ngIf="mode=='add'">
+      <div class="process">
+        <div class="process-row nav nav-tabs ">
+          <div class="process-step">
+            <button type="button" class="btn btn-primary   btn-circle  tablinks active"
+                    data-toggle="tab"
+                    (click)="openTab('info')"
+                    [disabled]="infoDisable">
+              <i class="fa fa-info fa-3x"></i>
+            </button>
+            <br>
+            <b>اطلاعات پایه</b>
+          </div>
+          <div class="process-step">
+            <button type="button" class="btn btn-primary   btn-circle tablinks" data-toggle="tab"
+                    (click)="openTab('contact')"
+                    [disabled]="contactDisable">
+              <i class="fa fa-address-book fa-3x">
+
+              </i>
+            </button>
+            <br>
+            <b>راه ارتباطی</b>
+          </div>
+          <div class="process-step">
+            <button type="button" class="btn btn-primary   btn-circle  tablinks" data-toggle="tab"
+                    (click)="openTab('profile')"
+                    [disabled]="profileDisable">
+              <i class="fa fa-image fa-3x"></i>
+            </button>
+            <br>
+            <b>عکس پروفایل</b>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="info" class="tabcontent active" style="display: block;">
+
+        <nb-card>
+          <nb-card-header>
+            <h3>اطلاعات شخصی</h3>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">نام </label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="نام" [(ngModel)]="user.name"
+                         class="form-control" minlength="3"
+                         (keyup)="storage()">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkFa(user.name)}}</p>
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">نام خانوادگی</label>
+                <div class="input-group  input-group-sm">
+                  <input type="text" placeholder="نام خانوادگی" (keyup)="storage()"
+                         [(ngModel)]="user.family" minlength="3"
+                         class="form-control"/>
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkFa(user.family)}}</p>
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">نام پدر</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="نام پدر" [(ngModel)]="user.fatherName"
+                         (keyup)="storage()"
+                         name="fatherAdd" class="form-control"/>
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkFa(user.fatherName)}}</p>
+
+              </div>
+            </div>
+            <div class="row" style="margin-top: 2vh">
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">نام کاربری</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder=" نام کاربری" [(ngModel)]="user.userName"
+                         (keyup)="storage()" minlength="3"
+                         name="userNameAdd" class="form-control">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkEn(user.userName)}}</p>
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">کد ملی</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder=" کدملی" [(ngModel)]="user.nationalCode"
+                         class="form-control" maxlength="10" minlength="3"
+                         (keyup)="storage()" #searchNationalCode
+                         name="nationalCodeAdd"
+                         (change)="search(searchNationalCode.value)">
+                </div>
+
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label for="access">سطح دسترسی</label>
+                <select id="access" class="form-control" (change)="setUserType($event.target.value)"
+                        (keyup)="storage()"
+                        [(ngModel)]="user.userType.id"
+                        name="userTypeAdd"
+                        style="width: 100%;padding: 0px" dir="rtl"
+                        class="js-example-basic-single js-example-basic-single-userType">
+                  <option *ngFor="let item of userTypeList" [value]="item.id">{{item.name}}</option>
+                </select>
+
+              </div>
+            </div>
+            <div class="row" style="margin-top: 2vh">
+              <div class="col-md-4 col-sm-12">
+                <label for="bday" class="control-label">تاریخ تولد</label>
+                <div class="input-group input-group-sm">
+                  <input [textMask]="{mask:mask}" id="bday" class="form-control"
+                         name="dateAdd" [(ngModel)]="user.birthDay"
+                         (keyup)="storage()">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkDateValid(user.birthDay)}}</p>
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">رمز عبور </label>
+                <div class="input-group input-group-sm">
+                  <input type="password" placeholder=" رمز عبور"
+                         name="passAdd" [(ngModel)]="user.password"
+                         (keyup)="storage()"
+                         class="form-control"/>
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkEnNumber(user.password)}}</p>
+
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">تکرار رمز عبور</label>
+                <div class="input-group input-group-sm">
+                  <input type="password" placeholder=" تکرار رمز عبور"
+                         name="cpassAdd"
+                         [(ngModel)]="cPassword" class="form-control"
+                         (change)="checkPass()">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkEnNumber(cPassword)}}</p>
+
+              </div>
+            </div>
+            <div class="row" style="margin-top: 2vh">
+
+              <div class="col-md-4 col-sm-12">
+                <label for="work" class="control-label">تاریخ شروع به کار</label>
+                <div class="input-group input-group-sm">
+                  <input [textMask]="{mask:mask}" id="work" [(ngModel)]="user.startWork"
+                         name="workAdd" (keyup)="storage()"
+                         class="form-control">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkDateValid(user.startWork)}}</p>
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label for="or">انتخاب سازمان</label>
+                <select id="or" class="form-control" (change)="setOrgan($event.target.value)"
+                        [(ngModel)]="user.organization.id"
+                        style="width: 100%;padding: 0px" dir="rtl"
+                        name="organAdd"
+                        class="js-example-basic-single js-example-basic-single-organ">
+                  <option *ngFor="let item of organList" [value]="item.id">{{item.name}}</option>
+                </select>
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+
+              </div>
+            </div>
+          </nb-card-body>
+          <nb-card-footer style="text-align: left">
+            <button class="btn btn-success" [disabled]="myVal.checkFa(user.name)!=='' ||
+                                                          myVal.checkFa(user.family)!=='' ||
+                                                          myVal.checkFa(user.fatherName)!=='' ||
+                                                           myVal.checkEn(user.userName)!=='' ||
+                                                          myVal.checkDateValid(user.birthDay)!=='' ||
+                                                           myVal.checkEnNumber(user.password)!=='' ||
+                                                           myVal.checkEnNumber(cPassword)!=='' ||
+                                                          myVal.checkDateValid(user.startWork)!==''"
+                    (click)="openTab('contact')">بعدی
+            </button>
+          </nb-card-footer>
+        </nb-card>
+      </div>
+
+
+      <div id="contact" class=" tabcontent">
+
+        <nb-card>
+          <nb-card-header>
+            <h3>راه ارتباطی</h3>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-md-4 col-sm-12">
+                <label for="phoneNumber">شماره تلفن</label>
+                <div class="input-group input-group-sm">
+                  <input id="phoneNumber" type="text" maxlength="11"
+                         name="phoneAdd"
+                         placeholder=" شماره تلفن" class="form-control"
+                         [(ngModel)]="user.userContact.phoneNumber"
+                         (keyup)="storage()">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkEnNumber(user.userContact.phoneNumber)}}</p>
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label for="telId">تلگرام</label>
+                <div class="input-group input-group-sm">
+                  <input id="telId" type="text" placeholder=" تلگرام"
+                         class="form-control" name="telAdd"
+                         [(ngModel)]="user.userContact.telegramId" (keyup)="storage()">
+                </div>
+
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label for="email">ایمیل</label>
+                <div class="input-group input-group-sm">
+                  <input id="email" type="email" placeholder=" ایمیل"
+                         class="form-control" name="emailAdd"
+                         [(ngModel)]="user.userContact.email" (keyup)="storage()">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkEmail(user.userContact.email)}}</p>
+
+              </div>
+            </div>
+            <div class="row">
+              <!--<div class="col col-md-3"></div>-->
+              <div class="col-md-4 col-sm-12">
+                <label for="address">آدرس</label>
+                <div class="input-group input-group-sm">
+                  <input id="address" type="text" placeholder=" آدرس"
+                         class="form-control" name="addressAdd"
+                         [(ngModel)]="user.userContact.address" (keyup)="storage()">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkFa(user.userContact.address)}}</p>
+
+              </div>
+              <div class="col col-md-8"></div>
+
+            </div>
+            <!--</div>-->
+            <!--<div class="col col-md-3"></div>-->
+            <!--</div>-->
+          </nb-card-body>
+          <nb-card-footer style="text-align: left">
+            <button class="btn btn-outline-success" [disabled]="myVal.checkEnNumber(user.userContact.phoneNumber)!=='' ||
+                                                          myVal.checkEmail(user.userContact.email)!=='' ||
+                                                          myVal.checkFa(user.userContact.address)!==''"
+                    (click)="openTab('info')">قبلی
+            </button>
+            <button class="btn btn-success" (click)="openTab('profile')">بعدی</button>
+          </nb-card-footer>
+        </nb-card>
+
+      </div>
+
+
+      <div id="profile" class=" tabcontent">
+
+        <nb-card>
+          <nb-card-header>
+            <h3>پروفایل</h3>
+          </nb-card-header>
+          <nb-card-body>
+
+            <!--<div class=" col-lg-12 col-sm-6 col-xs-6" style="margin-top:10px;position:relative;">-->
+            <!--<label style="display: inherit"> تصویر پروفایل:</label>-->
+            <!--<app-imgcropper (onPush)="userImageSet($event)"></app-imgcropper>-->
+
+            <!--</div>-->
+
+            <div class="row" style="margin-top: 5vh">
+              <div class="col-md-4 col-sm-12"></div>
+              <div class="col-md-4 col-sm-12 text-center">
+                <label class="control-label">
+                  تصویر پروفایل را انتخاب کنید
+                </label>
+                <nb-card>
+                  <nb-card-body>
+                    <img *ngIf="!user.imageUrl" src="../../../assets/images/w.png"
+                         height="140px" width="100%" alt="noImage">
+                    <img *ngIf="user.imageUrl" src="{{user.imageUrl}}" height="140px" width="100%">
+                  </nb-card-body>
+                  <nb-card-footer style="text-align: center;height: 12vh;background-color: #1b567c">
+                    <label>
+                      <a style="color: white;cursor: pointer"><b>انتخاب تصویر </b>
+                      </a>
+                      <input id="custom-input2" type="file" style="display: none;"
+                             (change)="fileChangeListener($event,user)">
+                    </label>
+                  </nb-card-footer>
+                </nb-card>
+              </div>
+              <div class="col-md-4 col-sm-12"></div>
+            </div>
+
+
+          </nb-card-body>
+          <nb-card-footer style="text-align: left">
+            <button class="btn btn-outline-success" (click)="openTab('contact')">قبلی</button>
+            <button class="btn btn-success" (click)="addUser()">ثبت</button>
+          </nb-card-footer>
+        </nb-card>
+      </div>
+
+      <!--</div>-->
+    </div>
+
+
+    <div *ngIf="mode=='edit'">
+      <div class="process">
+        <div class="process-row nav nav-tabs ">
+          <div class="process-step">
+            <button type="button" class="btn btn-primary   btn-circle  tablinks active"
+                    data-toggle="tab"
+                    (click)="openTab('infoEdit')"
+                    [disabled]="infoEditDisable">
+              <i class="fa fa-info fa-3x"></i>
+            </button>
+            <br>
+            <b>اطلاعات پایه</b>
+          </div>
+          <div class="process-step">
+            <button type="button" class="btn btn-primary   btn-circle tablinks" data-toggle="tab"
+                    (click)="openTab('contactEdit')"
+                    [disabled]="contactEditDisable">
+              <i class="fa fa-address-book fa-3x">
+
+
+              </i>
+            </button>
+            <br>
+            <b>راه ارتباطی</b>
+          </div>
+          <div class="process-step">
+            <button type="button" class="btn btn-primary   btn-circle  tablinks" data-toggle="tab"
+                    (click)="openTab('profileEdit')"
+                    [disabled]="profileEditDisable">
+              <i class="fa fa-image fa-3x"></i>
+            </button>
+            <br>
+            <b>عکس پروفایل</b>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="infoEdit" class="tabcontent active" style="display: block;">
+
+        <nb-card>
+          <nb-card-header>
+            <h3>اطلاعات شخصی</h3>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">نام </label>
+                <div class=" input-group input-group-sm">
+                  <input type="text" placeholder="نام" [(ngModel)]="userEdit.name" class="form-control"/>
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkFa(userEdit.name)}}</p>
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">نام خانوادگی</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="نام خانوادگی" [(ngModel)]="userEdit.family"
+                         class="form-control"/>
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkFa(userEdit.family)}}</p>
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">نام پدر</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="نام پدر" [(ngModel)]="userEdit.fatherName"
+                         class="form-control"/>
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkFa(userEdit.fatherName)}}</p>
+              </div>
+            </div>
+            <div class="row" style="margin-top: 2vh">
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">نام کاربری</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder=" نام کاربری" [(ngModel)]="userEdit.userName"
+                         class="form-control">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkEn(userEdit.userName)}}</p>
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">کد ملی</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder=" کدملی" [(ngModel)]="userEdit.nationalCode"
+                         class="form-control" maxlength="10" minlength="3"
+                         #searchNationalCode (change)="search(searchNationalCode.value)">
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label for="accessEdit">سطح دسترسی</label>
+                <select id="accessEdit" class="form-control" [(ngModel)]="userEdit.userType.id"
+                        (change)="setUserTypeEdit($event)"
+                        style="width: 100%;padding: 0px" dir="rtl"
+                        class="js-example-basic-single js-example-basic-single-UserTypeEdit">
+                  <option *ngFor="let item of userTypeList" [value]="item.id">{{item.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="row" style="margin-top: 2vh">
+              <div class="col-md-4 col-sm-12">
+                <label for="bdayEdit" class="control-label">تاریخ تولد</label>
+                <div class="input-group input-group-sm">
+                  <input [textMask]="{mask:mask}" id="bdayEdit" class="form-control" [(ngModel)]="userEdit.birthDay">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkDateValid(userEdit.birthDay)}}</p>
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label for="organEdit">سازمان</label>
+                <select id="organEdit" class="form-control" (change)="setOrganEdit($event.target.value)"
+                        [(ngModel)]="userEdit.organization.id"
+                        style="width: 100%;padding: 0px" dir="rtl"
+                        class="js-example-basic-single js-example-basic-single-organEdit">
+                  <option *ngFor="let item of organList" [value]="item.id">{{item.name}}</option>
+                </select>
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label for="workEdit" class="control-label">تاریخ شروع به کار</label>
+                <div class="input-group input-group-sm">
+                  <input [textMask]="{mask:mask}" id="workEdit" [(ngModel)]="userEdit.startWork" class="form-control">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkDateValid(userEdit.startWork)}}</p>
+              </div>
+            </div>
+          </nb-card-body>
+          <nb-card-footer style="text-align: left">
+            <button class="btn btn-success" [disabled]="myVal.checkFa(userEdit.name)!=='' ||
+                                                          myVal.checkFa(userEdit.family)!=='' ||
+                                                          myVal.checkFa(userEdit.fatherName)!=='' ||
+                                                           myVal.checkEn(userEdit.userName)!=='' ||
+                                                          myVal.checkDateValid(userEdit.birthDay)!=='' ||
+                                                          myVal.checkDateValid(userEdit.startWork)!==''"
+                    (click)="openTab('contactEdit')">بعدی
+            </button>
+          </nb-card-footer>
+        </nb-card>
+      </div>
+
+
+      <div id="contactEdit" class=" tabcontent">
+
+        <nb-card>
+          <nb-card-header>
+            <h3>راه ارتباطی</h3>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-md-4 col-sm-12">
+                <label for="phoneNumberEdit">شماره تلفن</label>
+                <div class="input-group input-group-sm">
+                  <input id="phoneNumberEdit" type="text" maxlength="10"
+                         placeholder=" شماره تلفن" class="form-control"
+                         [(ngModel)]="userEdit.userContact.phoneNumber">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkEnNumber(userEdit.userContact.phoneNumber)}}</p>
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label for="telIdEdit">تلگرام</label>
+                <div class="input-group input-group-sm">
+                  <input id="telIdEdit" type="text" placeholder=" تلگرام"
+                         class="form-control"
+                         [(ngModel)]="userEdit.userContact.telegramId">
+                </div>
+                <!--<p style="color:red;margin-top: 1vh;">{{myVal.checkDateValid(userEdit.birthDay)}}</p>-->
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label for="emailEdit">ایمیل</label>
+                <div class="input-group input-group-sm">
+                  <input id="emailEdit" type="email" placeholder=" ایمیل"
+                         class="form-control"
+                         [(ngModel)]="userEdit.userContact.email"></div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkEmail(userEdit.userContact.email)}}</p>
+              </div>
+            </div>
+            <div class="row">
+              <!--<div class="col col-md-3"></div>-->
+              <div class="col-md-4 col-sm-12">
+                <label for="addressEdit">آدرس</label>
+                <div class="input-group input-group-sm">
+                  <input id="addressEdit" type="text" placeholder=" آدرس"
+                         class="form-control"
+                         [(ngModel)]="userEdit.userContact.address">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkFa(userEdit.userContact.address)}}</p>
+              </div>
+              <div class="col col-md-8"></div>
+
+            </div>
+            <!--<div class="col col-md-3"></div>-->
+            <!--</div>-->
+          </nb-card-body>
+          <nb-card-footer style="text-align: left">
+            <button class="btn btn-outline-success" [disabled]="myVal.checkEnNumber(userEdit.userContact.phoneNumber)!=='' ||
+                                                          myVal.checkEmail(userEdit.userContact.email)!=='' ||
+                                                          myVal.checkFa(userEdit.userContact.address)!==''"
+                    (click)="openTab('infoEdit')">قبلی
+            </button>
+            <button class="btn btn-success" (click)="openTab('profileEdit')">بعدی</button>
+          </nb-card-footer>
+        </nb-card>
+
+      </div>
+
+
+      <div id="profileEdit" class=" tabcontent">
+
+        <nb-card>
+          <nb-card-header>
+            <h3>پروفایل</h3>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row" style="margin-top: 5vh">
+              <div class="col-md-4 col-sm-12"></div>
+              <div class="col-md-4 col-sm-12 text-center">
+                <label class="control-label">
+                  تصویر پروفایل را انتخاب کنید
+                </label>
+                <nb-card>
+                  <nb-card-body>
+                    <img *ngIf="!userEdit.imageUrl && !userEdit.image.imageData" src="../../../assets/images/w.png"
+                         height="140px" width="100%" alt="noImage">
+                    <img *ngIf="userEdit.imageUrl" src="{{userEdit.imageUrl}}" height="140px" width="100%">
+                  </nb-card-body>
+                  <nb-card-footer style="text-align: center;height: 12vh;background-color: #1b567c">
+                    <label>
+                      <a style="color: white;cursor: pointer"><b>انتخاب تصویر </b>
+                      </a>
+                      <input id="custom-input2124345" type="file" style="display: none;"
+                             (change)="fileChangeListener($event,userEdit)">
+                    </label>
+                  </nb-card-footer>
+                </nb-card>
+              </div>
+              <div class="col-md-4 col-sm-12"></div>
+            </div>
+
+          </nb-card-body>
+          <nb-card-footer style="text-align: left">
+            <button class="btn btn-outline-success" (click)="openTab('contactEdit')">قبلی</button>
+            <button class="btn btn-success" (click)="edit()">ویرایش</button>
+          </nb-card-footer>
+        </nb-card>
+      </div>
+
+      <!--</div>-->
+    </div>
+
+    <div *ngIf="mode=='complete'">
+      <div class="process">
+        <div class="process-row nav nav-tabs ">
+          <div class="process-step">
+            <button type="button" class="btn btn-primary   btn-circle  tablinks active"
+                    data-toggle="tab"
+                    (click)="openTab('infoComplete')"
+                    [disabled]="infoCompleteDisable">
+              <i class="fa fa-info fa-3x"></i>
+            </button>
+            <br>
+            <b>اطلاعات پایه</b>
+          </div>
+          <div class="process-step">
+            <button type="button" class="btn btn-primary btn-circle tablinks" data-toggle="tab"
+                    (click)="openTab('contactComplete')"
+                    [disabled]="contactCompleteDisable">
+              <i class="fa fa-address-book fa-3x">
+
+              </i>
+            </button>
+            <br>
+            <b>راه ارتباطی</b>
+          </div>
+          <div class="process-step">
+            <button type="button" class="btn btn-primary btn-circle  tablinks" data-toggle="tab"
+                    (click)="openTab('profileComplete')"
+                    [disabled]="profileCompleteDisable">
+              <i class="fa fa-image fa-3x"></i>
+            </button>
+            <br>
+            <b>عکس پروفایل</b>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="infoComplete" class="tabcontent active" style="display: block;">
+
+        <nb-card>
+          <nb-card-header>
+            <h3>اطلاعات شخصی</h3>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">نام </label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="نام" [(ngModel)]="userComplete.name"
+                         class="form-control" name="nameComplete"/>
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkFa(userComplete.name)}}</p>
+
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">نام خانوادگی</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="نام خانوادگی" [(ngModel)]="userComplete.family"
+                         class="form-control" name="familyComplete"/>
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkFa(userComplete.family)}}</p>
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">نام پدر</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="نام پدر" [(ngModel)]="userComplete.fatherName"
+                         class="form-control" name="fatherComplete"/>
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkFa(userComplete.fatherName)}}</p>
+
+              </div>
+            </div>
+            <div class="row" style="margin-top: 2vh">
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">نام کاربری</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder=" نام کاربری" [(ngModel)]="userComplete.userName"
+                         class="form-control" name="userNameComplete">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkEn(userComplete.userName)}}</p>
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label class="control-label">کد ملی</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder=" کدملی" [(ngModel)]="userComplete.nationalCode"
+                         class="form-control" maxlength="10" minlength="3"
+                         #searchNationalCode name="nationalCodeComplete"
+                         (change)="search(searchNationalCode.value)">
+                </div>
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <!--<label for="accessComplete">سطح دسترسی</label>-->
+                <!--<select id="accessComplete" class="form-control" [(ngModel)]="userComplete.userType"-->
+                <!--(change)="setUserType($event)"-->
+                <!--class="js-example-basic-single js-example-basic-single-userTypeComplete">-->
+                <!--<option *ngFor="let item of userTypeList">{{item.name}}</option>-->
+                <!--</select>-->
+                <label for="bdayComplete" class="control-label">تاریخ تولد</label>
+                <input [textMask]="{mask:mask}" id="bdayComplete" class="form-control"
+                       [(ngModel)]="userComplete.birthDay" name="dateComplete">
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkDateValid(userComplete.birthDay)}}</p>
+              </div>
+
+            </div>
+            <div class="row" style="margin-top: 2vh">
+              <!--<div class="col-md-4 col-sm-12">-->
+              <!--<label for="organ" class="control-label">انتخاب سازمان</label>-->
+              <!--<select id="organ" class="form-control" (change)="setOrganComplete($event.target.value)"-->
+              <!--[(ngModel)]="userComplete.organization.id"-->
+              <!--style="width: 100%;padding: 0px" dir="rtl"-->
+              <!--class="js-example-basic-single js-example-basic-single-organComplete">-->
+              <!--<option *ngFor="let item of organList" [value]="item.id">{{item.name}}</option>-->
+              <!--</select>-->
+              <!--</div>-->
+              <div class="col-md-4 col-sm-12">
+                <label for="workComplete" class="control-label">تاریخ شروع به کار</label>
+                <div class="input-group input-group-sm">
+                  <input [textMask]="{mask:mask}" id="workComplete" name="workComplete"
+                         class="form-control"
+                         [(ngModel)]="userComplete.startWork">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkDateValid(userComplete.startWork)}}</p>
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+
+              </div>
+            </div>
+          </nb-card-body>
+          <nb-card-footer style="text-align: left">
+            <button class="btn btn-success" [disabled]="myVal.checkFa(userComplete.name)!=='' ||
+                                                          myVal.checkFa(userComplete.family)!=='' ||
+                                                          myVal.checkFa(userComplete.fatherName)!=='' ||
+                                                           myVal.checkEn(userComplete.userName)!=='' ||
+                                                          myVal.checkDateValid(userComplete.birthDay)!=='' ||
+                                                          myVal.checkDateValid(userComplete.startWork)!==''"
+                    (click)="openTab('contactComplete')">بعدی
+            </button>
+          </nb-card-footer>
+        </nb-card>
+      </div>
+
+
+      <div id="contactComplete" class=" tabcontent">
+
+        <nb-card>
+          <nb-card-header>
+            <h3>راه ارتباطی</h3>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-md-4 col-sm-12">
+                <label for="phoneNumberComplete">شماره تلفن</label>
+                <div class="input-group input-group-sm">
+                  <input id="phoneNumberComplete" type="number" maxlength="10"
+                         placeholder=" شماره تلفن" class="form-control"
+                         name="phoneComplete"
+                         [(ngModel)]="userComplete.userContact.phoneNumber">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkEnNumber(userComplete.userContact.phoneNumber)}}</p>
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label for="telIdComplete">تلگرام</label>
+                <div class="input-group input-group-sm">
+                  <input id="telIdComplete" type="text" placeholder=" تلگرام"
+                         name="telComplete"
+                         class="form-control"
+                         [(ngModel)]="userComplete.userContact.telegramId">
+                </div>
+                <!--<p style="color:red;margin-top: 1vh;">{{myVal.checkEmail(user.userContact.email)}}</p>-->
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label for="emailComplete">ایمیل</label>
+                <div class="input-group input-group-sm">
+                  <input id="emailComplete" type="email" placeholder=" ایمیل"
+                         name="emailComplete"
+                         class="form-control"
+                         [(ngModel)]="userComplete.userContact.email">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkEmail(userComplete.userContact.email)}}</p>
+
+              </div>
+            </div>
+            <div class="row">
+              <!--<div class="col col-md-3"></div>-->
+              <div class="col-md-4 col-sm-12">
+                <label for="addressComplete">آدرس</label>
+                <div class="input-group input-group-sm">
+                  <input id="addressComplete" type="text" placeholder=" آدرس"
+                         name="addressComplete"
+                         class="form-control"
+                         [(ngModel)]="userComplete.userContact.address">
+                </div>
+                <p style="color:red;margin-top: 1vh;">{{myVal.checkFa(userComplete.userContact.address)}}</p>
+
+              </div>
+              <div class="col col-md-8"></div>
+
+            </div>
+            <!--<div class="col col-md-3"></div>-->
+            <!--</div>-->
+          </nb-card-body>
+          <nb-card-footer style="text-align: left">
+            <button class="btn btn-outline-success" [disabled]="myVal.checkEnNumber(userComplete.userContact.phoneNumber)!=='' ||
+                                                          myVal.checkEmail(userComplete.userContact.email)!=='' ||
+                                                          myVal.checkFa(userComplete.userContact.address)!==''"
+                    (click)="openTab('infoComplete')">قبلی
+            </button>
+            <button class="btn btn-success" (click)="openTab('profileComplete')">بعدی</button>
+          </nb-card-footer>
+        </nb-card>
+
+      </div>
+
+
+      <div id="profileComplete" class=" tabcontent">
+
+        <nb-card>
+          <nb-card-header>
+            <h3>پروفایل</h3>
+          </nb-card-header>
+          <nb-card-body>
+
+            <div class="row" style="margin-top: 5vh">
+              <div class="col-md-4 col-sm-12"></div>
+              <div class="col-md-4 col-sm-12 text-center">
+                <label class="control-label">
+                  تصویر پروفایل را انتخاب کنید
+                </label>
+                <nb-card>
+                  <nb-card-body>
+                    <img *ngIf="!userComplete.imageUrl" src="../../../assets/images/w.png"
+                         height="140px" width="100%" alt="noImage">
+                    <img *ngIf="userComplete.imageUrl" src="{{userComplete.imageUrl}}" height="140px" width="100%">
+                  </nb-card-body>
+                  <nb-card-footer style="text-align: center;height: 10vh;background-color: #1b567c">
+                    <label>
+                      <a style="color: white;cursor: pointer"><b>انتخاب تصویر </b>
+                      </a>
+                      <input id="custom-input252" type="file" style="display: none;"
+                             (change)="fileChangeListener($event,userComplete)">
+                    </label>
+                  </nb-card-footer>
+                </nb-card>
+              </div>
+              <div class="col-md-4 col-sm-12"></div>
+            </div>
+
+          </nb-card-body>
+          <nb-card-footer style="text-align: left">
+            <button class="btn btn-outline-success" (click)="openTab('contactComplete')">قبلی
+            </button>
+            <button class="btn btn-success" (click)="complete()">تکمیل</button>
+          </nb-card-footer>
+        </nb-card>
+      </div>
+      <!--</div>-->
+    </div>
+
+  </nb-card-body>
+  <nb-card-footer>
+
+  </nb-card-footer>
+</nb-card>

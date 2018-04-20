@@ -1,0 +1,557 @@
+<nb-card *ngIf="mode==''">
+  <nb-card-header>
+    <div class="row">
+      <div class="col-md-4" style="text-align: right">
+        <button class="btn btn-hero-success" style="margin: 4px;" (click)="add()">ثبت کالای جدید</button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">لیست اقلام</div>
+      <div class="col-md-4 pull-left">
+
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body style="direction: rtl!important;">
+    <div class="row">
+      <div class="col col-md-3"></div>
+      <div class="col col-md-3">
+        <select class="form-control"
+                style="width: 100%;padding: 0px" dir="rtl"
+                class="js-example-basic-single js-example-basic-single-categoryList">
+          <option value="main" disabled="disabled">لطفا دسته بندی مورد نظر را انتخاب
+            کنید
+          </option>
+          <option *ngFor="let item of categoryList" [value]="item.id">{{item.title}}</option>
+        </select>
+      </div>
+      <div class="col col-md-3">
+        <select class="form-control"
+                style="width: 100%;padding: 0px" dir="rtl"
+                class="js-example-basic-single js-example-basic-single-parentItemList">
+          <option value="main" disabled="disabled">لطفا کالا والد مورد نظر را انتخاب
+            کنید
+          </option>
+          <option value="0">کالای اصلی</option>
+          <option *ngFor="let item of parentItemList" [value]="item.id">{{item.name}}</option>
+        </select>
+      </div>
+      <div class="col col-md-3">
+        <!--<select id="3" dir="rtl" multiple="multiple" class="form-control sparePartList"-->
+        <!--name="postList" style="width: 100%;margin: 10px" >-->
+        <!--<option *ngFor="let item of sparePartList"-->
+        <!--[value]="item.id">-->
+        <!--{{item.name}}-->
+        <!--</option>-->
+        <!--</select>-->
+      </div>
+    </div>
+
+    <table class="table table-striped table-bordered table-hover table-responsive"
+           style="margin-top: 5vh!important;width:100%!important; ">
+      <thead>
+      <tr>
+        <th class="text-center" style="width: 4%">ردیف</th>
+        <th class="text-center" style="width: 44%">نام کالا</th>
+        <th class="text-center" style="width: 44%"> اولویت کالا</th>
+        <th class="text-center" style="width: 4%">ویرایش</th>
+        <th class="text-center" style="width: 4%">حذف</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr *ngFor="let item of itemList;let i =index">
+        <td class="text-center">{{i+1}}</td>
+        <td class="text-center">{{item.name}}</td>
+        <td class="text-center">{{item.priority}}</td>
+        <td class="text-center">
+          <a (click)="editItem(item.id)" style="cursor: pointer;color: green">
+            <i class="nb-edit"></i>
+          </a>
+        </td>
+        <td class="text-center">
+          <a class="btnRemove" (click)="deleteItem(item.id,i)" style="cursor: pointer;color: red">
+            <i class="nb-trash"></i>
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </nb-card-body>
+  <nb-card-footer>
+
+  </nb-card-footer>
+</nb-card>
+
+
+
+
+
+
+<nb-card *ngIf="(mode=='add')||(mode=='edit')">
+  <nb-card-header>
+    <div class="row" *ngIf="mode=='add'">
+      <div class="col-md-4" style="text-align: right">
+        <button class="btn btn-hero-danger" style="margin: 4px;" (click)="cancel()">
+          انصراف
+        </button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">اضافه کردن کالا</div>
+      <div class="col-md-4 pull-left">
+
+      </div>
+      <!--<div class="col-md-4"><a class="pull-right" routerLink="/management/userManagement/listRole">لیست نقش</a></div>-->
+    </div>
+
+    <div class="row" *ngIf="mode=='edit'">
+      <div class="col-md-4" style="text-align: right">
+        <button class="btn btn-hero-danger" style="margin: 4px; width: 10vw" (click)="cancel()">
+          انصراف
+        </button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">ویرایش کردن کالا</div>
+      <div class="col-md-4 pull-left">
+
+      </div>
+      <!--<div class="col-md-4"><a class="pull-right" routerLink="/management/userManagement/listRole">لیست نقش</a></div>-->
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div *ngIf="mode=='add'">
+      <div class="row">
+        <div class="col-md-3 text-center">
+          <label class="control-label">دسته بندی </label>
+          <select class="form-control"
+                  [(ngModel)]="item.itemCategory.id"
+                  style="width: 100%;padding: 0px" dir="rtl"
+                  class="js-example-basic-single js-example-basic-single-categoryAdd">
+            <option value="main" disabled="disabled">لطفا دسته بندی مورد نظر را انتخاب
+              کنید
+            </option>
+            <option *ngFor="let item of categoryList" [value]="item.id">{{item.title}}</option>
+          </select>
+        </div>
+        <div class="col-md-3 text-center">
+          <label class="control-label">کالای والد </label>
+
+          <select class="form-control"
+                  [(ngModel)]="item.parentItem.id"
+                  style="width: 100%;padding: 0px" dir="rtl"
+                  class="js-example-basic-single js-example-basic-single-parentItemAdd">
+            <option value="main" disabled="disabled">لطفا کالای والد مورد نظر را انتخاب
+              کنید
+            </option>
+            <option value="0">کالای اصلی</option>
+            <option *ngFor="let item of parentItemList" [value]="item.id">{{item.name}}</option>
+          </select>
+        </div>
+        <div class="col-md-3 text-center">
+          <label class="control-label">قطعات یدکی</label>
+          <select id="51" dir="rtl" multiple="multiple" class="form-control sparePartListAdd"
+                  name="postList" style="width: 100%;margin: 10px;height:8vh!important">
+            <option *ngFor="let item of sparePartList"
+                    [value]="item.id">
+              {{item.name}}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-3 form-group required text-center">
+          <label class="control-label">اولویت</label>
+          <select class="form-control"
+                  [(ngModel)]="item.priority"
+                  style="width: 100%;padding: 0px" dir="rtl">
+            <option *ngFor="let item of priorityList" [value]="item._value">{{item._title}}</option>
+          </select>
+          <!--<p style="color:red;margin-top: 1vh;">{{myVal.checkDontNull(item.priority)}}</p>-->
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 5vh!important;">
+        <div class="col-md-3 form-group required text-center">
+          <label class="control-label">نام کالا </label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="نام کالا" maxlength="20" class="form-control" [(ngModel)]="item.name">
+          </div>
+          <p style="color:red;margin-top: 1vh;">{{myVal.checkFa(item.name)}}</p>
+        </div>
+        <div class="col-md-3 form-group required text-center">
+          <label class="control-label">عمر مفید کالا</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="عمر مفید کالا" class="form-control" maxlength="4" [(ngModel)]="item.life.useful">
+          </div>
+          <p style="color:red;margin-top: 1vh;">{{myVal.checkEnNumber(item.life.useful)}}</p>
+        </div>
+        <div class="col-md-3 form-group required text-center">
+          <label class="control-label">کارکرد فعلی کالا </label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="کارکرد فعلی کالا" maxlength="4" class="form-control" (change)="checkCurrent()"
+                   [(ngModel)]="item.life.current">
+          </div>
+          <p style="color:red;margin-top: 1vh;">{{myVal.checkEnNumber(item.life.current)}}</p>
+        </div>
+        <div class="col-md-3 form-group required text-center">
+          <label class="control-label">واحد اندازه گیری</label>
+          <select class="form-control"
+                  [(ngModel)]="item.life.unitOfMeasurement.id"
+                  style="width: 100%;padding: 0px" dir="rtl">
+            <option *ngFor="let item of measurementList" [value]="item.id">{{item.title}}</option>
+          </select>
+          <!--<p style="color:red;margin-top: 1vh;">{{myVal.checkDontNull(item.life.unitOfMeasurement.id)}}</p>-->
+        </div>
+      </div>
+      <nb-card style="margin-top: 5vh">
+        <nb-card-header>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-2 pull-right" style="text-align: right">
+                <h4 style="font-family: iranSans; font-size: 18px "><b>دوره زمانی</b></h4>
+              </div>
+              <div class="col-md-10pull-left">
+                <button style="background: #9C27B0; width: 10vw"
+                        class="btn btn-primary " (click)="setPeriod()">افزودن
+                </button>
+                <!--<button *ngIf="color==true" style="background: #FF808C; width: 10vw" class="btn btn-primary pull-left"-->
+                <!--(click)="setColor()">ذخیره-->
+                <!--</button>-->
+              </div>
+            </div>
+          </div>
+        </nb-card-header>
+        <nb-card-body *ngIf="setperiod==true">
+          <div class="row">
+            <div class="col-md-3">
+              <label class="control-label">نام دوره زمانی </label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="نام دوره زمانی" maxlength="20" class="form-control"
+                       [(ngModel)]="item.itemCheckingPeriod.name">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <label class="control-label">نوع دوره زمانی </label>
+              <div class="input-group input-group-sm">
+                <select class="form-group js-example-basic-single-periodTypeAdd"
+                        style="width: 100%;padding: 0px" dir="rtl" [(ngModel)]="item.itemCheckingPeriod.periodType">
+                  <option *ngFor="let item of periodTypeList" [value]="item._value">{{item._title}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <label class="control-label">مدت دوره </label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="مدت دوره" maxlength="4" class="form-control"
+                       [(ngModel)]="item.itemCheckingPeriod.timePeriod">
+              </div>
+            </div>
+            <div class="col-md-3 text-center">
+              <label class="control-label">زمان آغاز دوره</label>
+              <div class="input-group input-group-sm">
+                <input [textMask]="{mask:mask}" id="sDate" class="form-control" [(ngModel)]="item.itemCheckingPeriod.startDate">
+              </div>
+              <p  style="color:red;margin-top: 1vh;">{{myVal.checkDateValid(item.itemCheckingPeriod.startDate)}}</p>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+      <div class="row" style="margin-top: 5vh">
+        <div class="col-md-4  text-center">
+          <label class="control-label">انتخاب ویژگی های کالا</label>
+          <select dir="rtl" multiple="multiple" class="form-control js-example-basic-single property"
+                  name="postList" style="width: 100%;margin: 10px">
+            <option *ngFor="let item of propertyList"
+                    [value]="item.name">
+              {{item.name}}
+            </option>
+          </select>
+
+          <button class="btn btn-block" style="margin-top:5vh "
+                  *ngIf="!addProp" (click)="addNewProperty()">افزودن ویژگی جدید
+          </button>
+          <div class="row" *ngIf="addProp" style="margin-top:5vh ">
+            <div class="col col-md-4">
+              <label class="control-label">نام ویژگی</label>
+              <div class=" input-group input-group-sm">
+                <input class="form-control" [(ngModel)]="prop.name">
+              </div>
+            </div>
+            <div class="col col-md-4">
+              <label class="control-label">نوع ویژگی</label>
+              <select class="form-control"
+                      [(ngModel)]="prop.type"
+                      style="width: 100%;padding: 0px" dir="rtl">
+                <option *ngFor="let item of typeList" [value]="item._value">{{item._title}}</option>
+              </select>
+            </div>
+            <div class="col col-md-2 text-center">
+              <br>
+              <i class="fa fa-check text-center" style="color: green" (click)="addProperty()"></i>
+            </div>
+            <div class="col col-md-2 text-center">
+              <br>
+              <i class="fa fa-remove text-center" style="color: darkred" (click)="cancelProperty()"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col col-md-4">
+          <div class="row" *ngFor="let x of item.property;let i=index">
+            <div class="col col-md-10">
+              <label class="control-label">{{x.name}}</label>
+              <div class="input-group input-group-sm">
+                <input class="form-control" [(ngModel)]="x.value">
+
+              </div>
+            </div>
+            <div class="col col-md-2">
+              <i class="fa fa-remove" style="color:red" (click)="deleteProperty(i)"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col col-md-4 form-group required text-center">
+          <label class="control-label">
+            تصویر کالا را انتخاب کنید
+          </label>
+          <nb-card>
+            <nb-card-body>
+              <img *ngIf="!item.imageUrl" src="../../assets/images/w.png"
+                   height="140px" width="100%" alt="noImage">
+              <img *ngIf="item.imageUrl" src="{{item.imageUrl}}" width="190px">
+            </nb-card-body>
+            <nb-card-footer style="text-align: center;height: 10vh;background-color: #1b567c">
+              <label>
+                <a style="color: white;cursor: pointer"><b>انتخاب تصویر </b>
+                </a>
+                <input id="custom-input1" type="file" style="display: none;"
+                       (change)="fileChangeListener($event)">
+              </label>
+            </nb-card-footer>
+          </nb-card>
+          <p style="color:red;margin-top: 1vh;">{{myVal.checkDontNull(item.imageUrl)}}</p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="mode=='edit'">
+      <div class="row">
+        <div class="col-md-3 text-center">
+          <label class="control-label">دسته بندی </label>
+          <select class="form-control"
+                  [(ngModel)]="itemEdit.itemCategory.id"
+                  style="width: 100%;padding: 0px" dir="rtl"
+                  class="js-example-basic-single js-example-basic-single-categoryEdit">
+            <option value="main" disabled="disabled">لطفا دسته بندی مورد نظر را انتخاب
+              کنید
+            </option>
+            <option *ngFor="let item of categoryList" [value]="item.id">{{item.title}}</option>
+          </select>
+        </div>
+        <div class="col-md-3 text-center">
+          <label class="control-label">کالای والد </label>
+
+          <select class="form-control"
+                  [(ngModel)]="itemEdit.parentItem.id"
+                  style="width: 100%;padding: 0px" dir="rtl"
+                  class="js-example-basic-single js-example-basic-single-parentItemEdit">
+            <option value="main" disabled="disabled">لطفا کالای والد مورد نظر را انتخاب
+              کنید
+            </option>
+            <option value="0">کالای اصلی</option>
+            <option *ngFor="let item of parentItemList" [value]="item.id">{{item.name}}</option>
+          </select>
+        </div>
+        <div class="col-md-3 text-center">
+          <label class="control-label">قطعات یدکی</label>
+          <select id="511" dir="rtl" multiple="multiple" class="form-control sparePartListEdit"
+                  name="postList" style="width: 100%;margin: 10px;height:8vh!important">
+            <option *ngFor="let item of sparePartList"
+                    [value]="item.id">
+              {{item.name}}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-3 form-group required text-center">
+          <label class="control-label">اولویت</label>
+          <select class="form-control"
+                  [(ngModel)]="itemEdit.priority"
+                  style="width: 100%;padding: 0px" dir="rtl">
+            <option *ngFor="let item of priorityList" [value]="item._value">{{item._title}}</option>
+          </select>
+          <p style="color:red;margin-top: 1vh;">{{myVal.checkDontNull(itemEdit.priority)}}</p>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 5vh!important;">
+        <div class="col-md-3 form-group required text-center">
+          <label class="control-label">نام کالا </label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="نام کالا" class="form-control" [(ngModel)]="itemEdit.name">
+          </div>
+          <p style="color:red;margin-top: 1vh;">{{myVal.checkFa(itemEdit.name)}}</p>
+        </div>
+        <div class="col-md-3 form-group required text-center">
+          <label class="control-label">عمر مفید کالا</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="عمر مفید کالا" class="form-control" [(ngModel)]="itemEdit.life.useful">
+          </div>
+          <p style="color:red;margin-top: 1vh;">{{myVal.checkEnNumber(itemEdit.life.useful)}}</p>
+        </div>
+        <div class="col-md-3 form-group required text-center">
+          <label class="control-label">کارکرد فعلی کالا </label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="کارکرد فعلی کالا" class="form-control" (change)="checkCurrentEdit()"
+                   [(ngModel)]="itemEdit.life.current">
+          </div>
+          <p style="color:red;margin-top: 1vh;">{{myVal.checkEnNumber(itemEdit.life.current)}}</p>
+        </div>
+        <div class="col-md-3 form-group required text-center">
+          <label class="control-label">واحد اندازه گیری</label>
+          <select class="form-control"
+                  [(ngModel)]="itemEdit.life.unitOfMeasurement.id"
+                  style="width: 100%;padding: 0px" dir="rtl">
+            <option *ngFor="let item of measurementList" [value]="item.id">{{item.title}}</option>
+          </select>
+          <p style="color:red;margin-top: 1vh;">{{myVal.checkDontNull(itemEdit.life.unitOfMeasurement.id)}}</p>
+        </div>
+      </div>
+      <nb-card style="margin-top: 5vh">
+        <nb-card-header>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-2 pull-right" style="text-align: right">
+                <h4 style="font-family: iranSans; font-size: 18px "><b>دوره زمانی</b></h4>
+              </div>
+              <div class="col-md-10pull-left">
+                <button style="background: #9C27B0; width: 10vw"
+                        class="btn btn-primary " (click)="setPeriodEdit()">افزودن
+                </button>
+              </div>
+            </div>
+          </div>
+        </nb-card-header>
+        <nb-card-body *ngIf="setperiodEdit==true">
+          <div class="row">
+            <div class="col-md-3">
+              <label class="control-label">نام دوره زمانی </label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="نام دوره زمانی" class="form-control"
+                       [(ngModel)]="itemEdit.itemCheckingPeriod.name">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <label class="control-label">نوع دوره زمانی </label>
+              <div class="input-group input-group-sm">
+                <select class="form-group js-example-basic-single-periodTypeAdd"
+                        style="width: 100%;padding: 0px" dir="rtl" [(ngModel)]="itemEdit.itemCheckingPeriod.periodType">
+                  <option *ngFor="let item of periodTypeList" [value]="item._value">{{item._title}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <label class="control-label">مدت دوره </label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="مدت دوره" class="form-control"
+                       [(ngModel)]="itemEdit.itemCheckingPeriod.timePeriod">
+              </div>
+            </div>
+            <div class="col-md-3 text-center">
+              <label class="control-label">زمان آغاز دوره</label>
+              <div class="input-group input-group-sm">
+                <input [textMask]="{mask:mask}" id="sDateEdit" class="form-control" [(ngModel)]="itemEdit.itemCheckingPeriod.startDate">
+              </div>
+              <p  style="color:red;margin-top: 1vh;">{{myVal.checkDateValid(itemEdit.itemCheckingPeriod.startDate)}}</p>
+            </div>
+          </div>
+
+        </nb-card-body>
+      </nb-card>
+      <div class="row" style="margin-top: 5vh">
+        <div class="col-md-4  text-center">
+          <label class="control-label">انتخاب ویژگی های کالا</label>
+          <select dir="rtl" multiple="multiple" class="form-control js-example-basic-single propertyEdit"
+                  name="postList" style="width: 100%;margin: 10px">
+            <option *ngFor="let item of propertyList"
+                    [value]="item.name">
+              {{item.name}}
+            </option>
+          </select>
+
+          <button class="btn btn-block" style="margin-top:5vh "
+                  *ngIf="!addProp" (click)="addNewProperty()">افزودن ویژگی جدید
+          </button>
+          <div class="row" *ngIf="addProp" style="margin-top:5vh ">
+            <div class="col col-md-4">
+              <label class="control-label">نام ویژگی</label>
+              <div class=" input-group input-group-sm">
+                <input class="form-control" [(ngModel)]="prop.name">
+              </div>
+            </div>
+            <div class="col col-md-4">
+              <label class="control-label">نوع ویژگی</label>
+              <select class="form-control"
+                      [(ngModel)]="prop.type"
+                      style="width: 100%;padding: 0px" dir="rtl">
+                <option *ngFor="let item of typeList" [value]="item._value">{{item._title}}</option>
+              </select>
+            </div>
+            <div class="col col-md-2 text-center">
+              <br>
+              <i class="fa fa-check text-center" style="color: green" (click)="addPropertyEdit()"></i>
+            </div>
+            <div class="col col-md-2 text-center">
+              <br>
+              <i class="fa fa-remove text-center" style="color: darkred" (click)="cancelProperty()"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col col-md-4">
+          <div class="row" *ngFor="let x of itemEdit.property;let i=index">
+            <div class="col col-md-10">
+              <label class="control-label">{{x.name}}</label>
+              <div class="input-group input-group-sm">
+                <input class="form-control" [(ngModel)]="x.value">
+
+              </div>
+            </div>
+            <div class="col col-md-2">
+              <i class="fa fa-remove" style="color:red" (click)="deleteProperty(i)"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col col-md-4 form-group required text-center">
+          <label class="control-label">
+            تصویر کالا را انتخاب کنید
+          </label>
+          <nb-card>
+            <nb-card-body>
+              <img *ngIf="!itemEdit.imageUrl && !itemEdit.image.imageData" src="../../assets/images/w.png"
+                   height="140px" width="100%" alt="noImage">
+              <img *ngIf="itemEdit.imageUrl" src="{{item.imageUrl}}" width="190px">
+            </nb-card-body>
+            <nb-card-footer style="text-align: center;height: 10vh;background-color: #1b567c">
+              <label>
+                <a style="color: white;cursor: pointer"><b>انتخاب تصویر </b>
+                </a>
+                <input id="custom-input1231" type="file" style="display: none;"
+                       (change)="fileChangeListener($event)">
+              </label>
+            </nb-card-footer>
+          </nb-card>
+          <p style="color:red;margin-top: 1vh;">{{myVal.checkDontNull(itemEdit.imageUrl)}}</p>
+        </div>
+      </div>
+    </div>
+
+
+  </nb-card-body>
+  <nb-card-footer>
+    <div style="text-align: center!important;" *ngIf="mode=='add'">
+      <button type="submit" class="btn btn-primary" [disabled]="myVal.checkFa(item.name) !='' ||
+                                                                myVal.checkEnNumber(item.life.useful) !=''||
+                                                                 myVal.checkEnNumber(item.life.current)!=''"
+              (click)="addItem()">ثبت</button>
+    </div>
+    <div style="text-align: center!important;" *ngIf="mode=='edit'">
+      <button type="submit" class="btn btn-primary"  [disabled]="myVal.checkFa(itemEdit.name) !='' ||
+                                                                myVal.checkEnNumber(itemEdit.life.useful) !=''||
+                                                                 myVal.checkEnNumber(itemEdit.life.current)!=''" (click)="updateItem()">ویرایش</button>
+    </div>
+  </nb-card-footer>
+</nb-card>
+
+

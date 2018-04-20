@@ -1,0 +1,77 @@
+* {
+  direction: rtl!important;
+}
+nb-card-header {
+  text-align: right!important;
+}
+.row {
+  margin-top: 2vh;
+}
+i {
+  font-size: 20px;
+  cursor: pointer;
+}
+tbody {
+  display:block;
+  height:200px;
+  overflow:auto;
+}
+thead, tbody tr {
+  direction: rtl!important;
+  text-align: right!important;
+  display:table;
+  width:100%;
+  //table-layout:fixed;/* even columns width , fix width of table too*/
+}
+
+agm-map {
+  width: 100%;
+  height: 40vh;
+}
+
+
+$padding-base: 10px;
+$color-body: #fff;
+$color-border: #ddd;
+$color-link: #0275d8;
+$border-radius: 0.25rem;
+
+.nav-tabs {
+  &--vertical {
+    border-bottom: none;
+    border-left: 1px solid $color-border;
+    display: flex;
+    flex-flow: column nowrap;
+  }
+
+  &--left {
+    margin: 0 $padding-base;
+
+    .nav-item + .nav-item {
+      margin-top: 0.25rem;
+    }
+
+    .nav-link {
+      transition: border-color 0.125s ease-in;
+      white-space: nowrap;
+
+      &:hover {
+        background-color: lighten($color-border, 10%);
+        border-color: transparent;
+      }
+    }
+
+    .nav-link.active {
+      border-bottom-color: $color-border;
+      border-left-color: $color-body;
+      border-bottom-right-radius: $border-radius;
+      border-top-left-radius: 0;
+      margin-left: -1px;
+
+      &:hover {
+        background-color: $color-body;
+        border-color: $color-link $color-body $color-link $color-link;
+      }
+    }
+  }
+}

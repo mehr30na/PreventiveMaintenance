@@ -1,0 +1,132 @@
+<!--<a (click)="test()">test</a>-->
+
+
+<div style="width: 100%;
+
+    text-align: left;
+    margin-top: 20px;">
+
+  <div class=" text-right myShadow" id="attachment">
+
+    <div class="">
+
+      <!--(change)="onChangeUploader($event)"/>-->
+      <label *ngIf="appdisabled===1" class=" " style="width: 180px;
+    height: 30px; background: #085d63; margin: 5px 5px 10px 10px; text-align: center">
+        <a style="    color: white;
+    font-size: 14px;"> انتخاب فایلها
+
+          <i class="fa fa-paperclip " aria-hidden="true" style="font-size: larger"></i>
+        </a>
+
+        <input type="file" style="display: none;" multiple [disabled]="appdisabled===0"
+               (change)="onChangeUploader(input,$event)" #input>
+      </label>
+
+    </div>
+    <!--<button style="border:0px;font-family:yekan; font-size:14px;width: 180px;-->
+    <!--height: 30px; background: #085d63; margin: 5px 5px 10px 10px; text-align: center; color: #fff" (click)="onUploadFile()">-->
+    <!--آپلود-->
+    <!--</button>-->
+
+
+    <label *ngIf="appdisabled===0" class="btn btn-primary sizeBtn" style="cursor: not-allowed; width: 180px;
+    height: 50px;">
+      <a style="   color: white;
+    font-size: 11px;">
+        <i class="fa fa-spinner fa-spin fa-3x"></i>
+        لطفا صبرکنید در حال آپلود
+      </a>
+      <input type="file" style="display: none;" multiple [disabled]="appdisabled===0"
+             (change)="onChangeUploader(input,$event)" #input>
+    </label>
+
+
+    <div class="row" style="margin: 10px">
+
+      <div class="column" style=" flex:10 ; color: #a3b0d8;text-align: center">
+
+
+        <img *ngIf="fileType==='image'" style="max-height: 500px;max-width: 400px"
+             [attr.src]="attachmemntPatch"/>
+
+        <div *ngIf="fileType==='video'">
+          <!--<div *ngFor="let mFile of fileModel">-->
+          <!--<div *ngIf="mFile.lastModified===lastModified" class="video">-->
+
+          <video controls id="videoPlayer">
+            <source
+              [attr.src]="attachmemntPatch"
+              type="video/mp4"/>
+            Browser not supported
+          </video>
+
+          <!--</div>-->
+          <!--</div>-->
+        </div>
+
+        <div *ngIf="fileType==='audio'">
+          <!--<div *ngFor="let mFile of fileModel">-->
+          <!--<div *ngIf="mFile.lastModified===lastModified" class="audio">-->
+          <audio controls id="audioPlayer">
+            <source
+              [attr.src]="attachmemntPatch"
+
+              type="audio/mp3"/>
+            Browser not supported
+          </audio>
+          <!--</div>-->
+          <!--</div>-->
+        </div>
+
+
+      </div>
+
+      <div class="flex-container" style="flex:10;">
+        <div class="col-md-4 col-sm-12 col-xs-12 " *ngFor="let file of fileModel; let i = index;">
+          <div class="ccol-md-12 col-sm-12 col-xs-12" style="text-align: center">
+            <div class="row">
+              <a class="btnRemove" (click)="del(file,i)"
+                 style="cursor: pointer;width: 100%;text-align: center">
+                <i class="glyphicon glyphicon-remove"></i>
+              </a>
+            </div>
+            <div class="row">
+              <a style=" cursor: pointer;width: 100% ; text-align: center">
+
+                <a *ngIf="file.type==='application' && appdisabled===1"
+                   (mousedown)=" showAttachmemntimage(file)"
+                   (mouseup)="showAttachmemntimage(file)">
+                  <a (mousedown)=" showAttachmemntimage(file)" (mouseup)="showAttachmemntimage(file)">
+                    <a href="{{attachmemntPatch}}" target="_blank">
+                      <img *ngIf="file.type==='application'"
+                           style="width:50px;height: 50px; margin: 10px;"
+                           src="../../../assets/images/icon/pdf.png"
+                           alt=""
+                           (click)="showAttachmemntimage(file)"
+                      />
+                    </a>
+                  </a>
+                </a>
+
+              </a>
+            </div>
+            <div class="row">
+              <a style="width:100%;text-align: center ; overflow: auto">
+                {{file.name}}
+              </a>
+            </div>
+
+
+          </div>
+
+
+        </div>
+      </div>
+
+    </div>
+    <!--sdcdsaas-->
+
+
+  </div>
+</div>

@@ -1,0 +1,274 @@
+<nb-card>
+  <nb-card-header>
+    <i (click)="addCompany()" class="fa fa-plus-circle float-left" style="font-size:3vw;color:green"></i>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col col-md-2 text-center" style="margin-top: 5vh">
+        <img src="../../../../assets/images/location.jpg" alt="noImage" height="120" width="100%">
+        <br>
+      </div>
+      <div class="col col-md-4" style="margin-top: 5vh">
+        <div class="row">
+          <label class="control-label"> نام شرکت </label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="نام" [(ngModel)]="company.name" class="form-control">
+          </div>
+        </div>
+      </div>
+      <div class="col col-md-1"></div>
+      <div class="col col-md-4" style="margin-top: 5vh">
+        <div class="row">
+          <label class="control-label">کد شرکت </label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="کد" [(ngModel)]="company.code"  class="form-control">
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="d-flex flex-row mt-2">
+      <ul class="nav nav-tabs nav-tabs--vertical nav-tabs--left" role="navigation" style="text-align: right">
+        <li class="nav-item">
+          <a href="#generalBusiness" class="nav-link active" data-toggle="tab" role="tab" aria-controls="generalBusiness">اطلاعات عمومی</a>
+        </li>
+        <li class="nav-item">
+          <a href="#filesBusiness" class="nav-link" data-toggle="tab" role="tab" aria-controls="filesBusiness">آپلود فایل</a>
+        </li>
+        <li class="nav-item">
+          <a href="#assetsBusiness" class="nav-link" data-toggle="tab" role="tab" aria-controls="assetsBusiness">دارایی ها</a>
+        </li>
+        <li class="nav-item">
+          <a href="#personnelBusiness" class="nav-link" data-toggle="tab" role="tab" aria-controls="personnelBusiness">کارکنان در ارتباط</a>
+        </li>
+        <li class="nav-item">
+          <a href="#logBusiness" class="nav-link" data-toggle="tab" role="tab" aria-controls="logBusiness">گزارشات</a>
+        </li>
+      </ul>
+
+
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="generalBusiness" role="tabpanel">
+          <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col col-md-4 text-center">
+              <div class="row">
+                <label class="control-label"> شماره موبایل </label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="شماره موبایل" [(ngModel)]="company.phoneNumber"  class="form-control">
+                </div>
+              </div>
+              <div class="row">
+                <label class="control-label">فکس</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="فکس" [(ngModel)]="company.fax"  class="form-control">
+                </div>
+              </div>
+              <div class="row">
+                <label class="control-label">ایمیل</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="ایمیل" [(ngModel)]="company.email" class="form-control">
+                </div>
+              </div>
+            </div>
+            <!--<div class="col ocl-md-1"></div>-->
+            <div class="col col-md-4" style="margin-right: 3vw">
+              <div class="row">
+                <label class="control-label">وب سایت</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="آدرس وبسایت" [(ngModel)]="company.webSite" class="form-control">
+                </div>
+              </div>
+
+              <div class="row">
+                <label class="control-label"> توضیحات </label>
+                <div class="input-group input-group-sm">
+                  <textarea type="text" placeholder="توضیحات " [(ngModel)]="company.description" class="form-control"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-md-1"></div>
+            <div class="col col-md-4">
+              <div class="row" style="margin-top: 0vh!important;">
+                <div class="col-md-10" style="text-align: right">
+                  <label class="control-label">واحد پول</label>
+                  <select class="form-control"
+                          style="width: 100%;padding: 0px" dir="rtl"
+                          class="js-example-basic-single currencyCompany">
+                    <option *ngFor="let item of currencyListCompany" [value]="item.id"></option>
+                  </select>
+                </div>
+                <div class="col-md-2" style="margin-top: 5vh">
+                              <span>
+                                <i class="fa fa-plus " style="color: green" (click)="showCurrencyAddModal()" ></i>
+                              </span>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-md-1"></div>
+            <div class="col col-md-5 text-right">
+              <div class="row">
+                <label class="control-label">استان</label>
+                <select class="form-control"
+                        style="width: 100%;padding: 0px" dir="rtl"
+                        class="js-example-basic-single provinceBusiness">
+                  <option *ngFor="let item of provinceList" [value]="item.id">{{item.name}}</option>
+                </select>
+              </div>
+
+              <div class="row">
+                <label class="control-label">شهر</label>
+                <select class="form-control"
+                        style="width: 100%;padding: 0px" dir="rtl"
+                        class="js-example-basic-single cityBusiness">
+                  <option *ngFor="let item of cityList" [value]="item.id">{{item.name}}</option>
+                </select>
+              </div>
+
+              <div class="row">
+                <label class="control-label"> آدرس </label>
+                <div class="input-group input-group-sm">
+                  <textarea type="text" placeholder="آدرس" [(ngModel)]="company.address.description" class="form-control"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="col col-md-5">
+              <agm-map [latitude]="company.address.city.location.lat" [longitude]="company.address.city.location.lng" (mapClick)="mapClicked($event)"
+                       [scrollwheel]="false" [zoom]="zoom">
+                <agm-marker [latitude]="company.address.lat" [longitude]="company.address.lng"></agm-marker>
+              </agm-map>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="filesBusiness" role="tabpanel">
+          <nb-card>
+            <nb-card-body>
+              <table class="table" style="border-radius: 4px;">
+                <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                <tr>
+                  <td>ردیف</td>
+                  <td>نام فایل</td>
+                  <td>نوع فایل</td>
+                  <!--<td>send</td>-->
+                  <td>حذف</td>
+                </tr>
+                </thead>
+                <tbody style="text-align: right">
+                <tr *ngFor="let item of company.documents;let i = index">
+                  ‍<td>{{i+1}}</td>
+                  <td>{{item.name}}</td>
+                  <td>{{item.contentType}}</td>
+                  <!--<td>send</td>-->
+                  <td>
+                    <a class="btnRemove" (click)="del(item.id,i)" style="cursor: pointer;color: red">
+                      <i class="nb-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+
+                </tbody>
+
+              </table>
+            </nb-card-body>
+            <!--</div>-->
+
+            <nb-card-footer>
+              <div style="width: 100%;
+    text-align: left;
+    margin-top: 20px;" class="text-center">
+
+                <div class=" text-right myShadow" id="attachment">
+
+                  <div class="text-center">
+                    <label *ngIf="appdisabled===1" class=" " style="width: 180px;
+    height: 30px; margin: 5px 5px 10px 10px; text-align: center">
+                      <a class="btn btn-round btn-hero-success" style="color: white;
+    font-size: 14px;"> انتخاب فایلها
+                        <i class="fa fa-paperclip " aria-hidden="true" style="font-size: larger"></i>
+                      </a>
+                      <input type="file" style="display: none;" multiple [disabled]="appdisabled===0"
+                             (change)="onChangeUploader(input,$event)"
+                             #input>
+                    </label>
+                  </div>
+                  <div class="text-center" *ngIf="appdisabled===0">
+                    <label style="cursor: not-allowed; width: 180px;
+    height: 50px;">
+                      <a style="   color: white;
+    font-size: 11px;" class="btn btn-round btn-hero-success">
+                        <i class="fa fa-spinner fa-spin fa-3x"></i>در حال آپلود
+                      </a>
+                      <input type="file" style="display: none;" multiple [disabled]="appdisabled===0"
+                             (change)="onChangeUploader(input,$event)"
+                             #input>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </nb-card-footer>
+          </nb-card>
+
+        </div>
+        <div class="tab-pane fade" id="assetsBusiness" role="tabpanel">
+
+        </div>
+        <div class="tab-pane fade" id="personnelBusiness" role="tabpanel">
+
+        </div>
+        <div class="tab-pane fade" id="logBusiness" role="tabpanel">
+          <nb-card>
+            <nb-card-body>
+              <table class="table" style="border-radius: 4px;">
+                <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                <tr>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>3</td>
+                  <td>4</td>
+                  <td>5</td>
+                </tr>
+                </thead>
+                <tbody>
+
+
+                </tbody>
+
+              </table>
+            </nb-card-body>
+          </nb-card>
+
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<app-dialog [(visible)]="showCurrencyAddForm" [title]="'بخش افزودن واحد پول'" style="direction: rtl">
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-4 text-right">
+      <label class="control-label"> عنوان واحد پول </label>
+      <div class="input-group input-group-sm">
+        <input type="text" placeholder="عنوان" [(ngModel)]="currency.name" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-4 text-right">
+      <label class="control-label"> نماد واحد پول</label>
+      <div class="input-group input-group-sm">
+        <input type="text" placeholder=" نماد " [(ngModel)]="currency.isoCode" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+  <div class="row text-center" style="margin-top: 5vh">
+    <div class="col col-md-12">
+    <button class="btn btn-hero-success" (click)="createCurrency()">ثبت واحد پول</button>
+  </div>
+  </div>
+</app-dialog>

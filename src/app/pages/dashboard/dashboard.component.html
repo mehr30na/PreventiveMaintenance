@@ -1,0 +1,130 @@
+<nb-card>
+  <nb-card-body>
+    <h2 style="text-align: right">نگهداری و تعمیرات پیشگیرانه یا PM چیست؟</h2>
+    <br>
+    <div class="row">
+      <div class="col col-md-6" style="justify-content: flex-start;text-align: right!important;">
+        سرویس نگهداری و تعمیرات پیشگیرانه (PM) مجموعه فعالیت ها و روش های منظم و دوره ای است که به منظور بررسی
+        وضعیت موجود, به روز رسانی و حفظ تجهیزات در شرایط مطلوب,انجام می شود . به نحوی که افزایش بهره وری و کاهش
+        فرسایش تجهیزات و در نتیجه کاهش هزینه های سنگین خرید و تعمیرات قطعه برای مجموعه به حداقل برسد.
+      </div>
+      <div class="col col-md-6" style="text-align: left;">
+        <img src="http://www.dayaserver.com/userfiles/Article/preventive_maintenance.jpg">
+      </div>
+    </div>
+    <p style="flex:1;justify-content: flex-start;text-align: right;font-size:12pt;">
+      <br>
+      <br>
+      <br>
+      اهداف:
+      <br>
+      هدف از اجرایPM را می توان به موارد ذیل خلاصه نمود:
+      <br>
+      1- بیشینه کردن دوره عمر مفید دستگاه ها و تجهیزات
+      <br>
+      2- بیشینه کردن قابلیت اطمینان دستگاه ها و تجهیزات
+      <br>
+      3- بیشینه کردن کارایی کل تجهیزات
+      <br>
+      4- کمینه کردن تعمیرات اتفاقی دستگاه هاو ماشين آلات
+      <br>
+      5- تحت کنترل در آوردن توقفات و جلوگیری از خرابی های عظیم به دلیل بروز یک اشکال جزیی و کم نمودن تعداد دفعات
+      از کار افتادن تجهیزات
+      <br>
+
+      6- تحت کنترل درآوردن موجودی قطعات یدکی در انبار و ایجاد نظم و ترتیب و استاندارد کردن امور مربوطه
+      <br>
+      7- کاهش هزینه های تعمیرات تکراری و متوالی و در نتیجه استفاده بهتر از قطعات یدکی
+      <br>
+
+      8- افزایش کیفیت راهبری و جلوگیری از اتلاف وقت و جلوگیری از فراموشی برخی از تعمیرات در زمان توقف
+      <br>
+      9- زمان سنجی و روش سنجی فعالیت های تعمیری و تولیدی و در نتیجه بالا بردن بهره وری
+      <br>
+      <br>
+      <br>
+      شاخصه هاي تعميرات سنتي
+      <br>
+      1-تعمير دستگاه، پس از خرابی آن
+      <br>
+      2- انجام سرويس ها و بازديدها بصورت ناقص، متفرق و سليقه اي
+      <br>
+      3-عدم ثبت مستمر اطلاعات تعميراتي
+      <br>
+      4-عدم بررسي و تجزيه و تحليل اطلاعات ثبت شده و صدور گزارش هاي مورد نياز
+      <br>
+      5-عدم بهره برداري از نتايج گزارشات به منظور اصلاح روشها
+    </p>
+
+
+  </nb-card-body>
+
+</nb-card>
+
+<div class="row">
+  <div class="col-md-6 text-center">
+
+    <nb-card>
+      <nb-card-header>
+        <label>تعداد اقلام براساس طبقه بندی</label>
+      </nb-card-header>
+      <nb-card-body>
+        <!--<div echarts [options]="options" class="echart"></div>-->
+        <ngx-echarts-pie *ngIf="go" [data]="categoryNumber" [dataLabel]="categoryLabel"></ngx-echarts-pie>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-md-6 text-center">
+
+    <nb-card>
+      <nb-card-header>
+        <label>تعداد تیکت ها براساس طبقه بندی</label>
+      </nb-card-header>
+      <nb-card-body>
+        <!--<div echarts [options]="options" class="echart"></div>-->
+        <ngx-echarts-pie *ngIf="go1" [data]="ticketNumber" [dataLabel]="categoryTicketLabel"></ngx-echarts-pie>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6 text-center">
+
+    <nb-card>
+      <nb-card-header>
+        <label>تعداد تیکت ها براساس سازمان ها</label>
+      </nb-card-header>
+      <nb-card-body>
+        <!--<div echarts [options]="options" class="echart"></div>-->
+        <ngx-echarts-pie *ngIf="go2" [data]="ticketNumberOrgan" [dataLabel]="organLabel"></ngx-echarts-pie>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-md-6 text-center">
+    <nb-card>
+      <nb-card-header>
+        <label>تعداد نت ها براساس سازمان ها</label>
+      </nb-card-header>
+      <nb-card-body>
+        <ngx-echarts-pie *ngIf="go3" [data]="netNumberOrgan" [dataLabel]="organLabelNet"></ngx-echarts-pie>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6 text-center">
+
+    <nb-card>
+      <nb-card-header>
+        <label>تعداد نت ها براساس  کارشناس ها</label>
+      </nb-card-header>
+      <nb-card-body>
+        <!--<div echarts [options]="options" class="echart"></div>-->
+        <ngx-echarts-pie *ngIf="go4" [data]="netNumberExpert" [dataLabel]="expertLabelNet"></ngx-echarts-pie>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-md-6 text-center">
+    
+  </div>
+</div>

@@ -1,0 +1,224 @@
+<div class="back"></div>
+<div class="login-wrap">
+  <div class="login-html">
+    <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
+    <label for="tab-1" class="tab" style="color: white;">ورود</label>
+    <input id="tab-2" type="radio" name="tab" class="sign-up">
+    <label for="tab-2" class="tab pull-right" style="color: white">ثبت نام</label>
+    <div class="login-form">
+
+      <div class="sign-in-htm">
+        <form [formGroup]="form">
+          <div class="group">
+            <label for="username" class="label">نام کاربری</label>
+            <input id="username" type="text" class="input" name="userName" formControlName="userName"
+                   [(ngModel)]="userPassIn.userName">
+            <p style="color: red"
+               *ngIf="!form.controls['userName'].valid && (form.controls['userName'].touched ||saveButton)">
+              وارد کردن نام کاربری الزامی است
+            </p>
+          </div>
+          <div class="group">
+            <label for="password" class="label">رمز عبور</label>
+            <input id="password" type="password" class="input" name="password" formControlName="password"
+                   [(ngModel)]="userPassIn.password"
+                   data-type="password">
+            <p style="color: red"
+               *ngIf="!form.controls['password'].valid && (form.controls['password'].touched ||saveButton)">
+              وارد کردن رمز عبور الزامی است
+            </p>
+          </div>
+          <div class="text-center" style="padding-left: 30px">
+            <div class="col-md-2 text-center">
+              <re-captcha class="reCaptcha2" theme="dark" (captchaResponse)="handleCorrectCaptcha($event)"
+                          site_key="6LezdksUAAAAACDzgmv7Lk_QZfx8SSz9XrO2mbzt"></re-captcha>
+            </div>
+          </div>
+          <div class="group text-center">
+            <button class="btn btn-block btn-round btn-hero-primary btn-sm"
+                    style="margin-top: 3%!important; cursor: pointer" (click)="signIn()">ورود
+            </button>
+            <!--<input type="submit" class="button" value="ورود" (click)="signIn()">-->
+            <a style="cursor: pointer; text-align:center;
+             margin-top:10%!important;
+              color:white;
+               position:absolute;" class="label" (click)="openModalForget()">رمز عبور خود را فراموش کرده اید؟</a>
+          </div>
+        </form>
+      </div>
+      <div class="sign-up-htm">
+        <form [formGroup]="form1">
+          <div class="group">
+            <label for="user" class="label">نام کاربری</label>
+            <input id="user" type="text" class="input" name="userNameUp" formControlName="userNameUp"
+                   [(ngModel)]="userPass.userName">
+            <p style="color: red"
+               *ngIf="!form1.controls['userNameUp'].valid && (form1.controls['userNameUp'].touched ||saveButton2)">
+              وارد کردن نام کاربری الزامی است
+            </p>
+          </div>
+          <div class="group">
+            <label for="pass" class="label">رمز عبور</label>
+            <input id="pass" type="password" class="input" name="passwordUp" formControlName="passwordUp"
+                   [(ngModel)]="userPass.password"
+                   data-type="password">
+            <p style="color: red"
+               *ngIf="!form1.controls['passwordUp'].valid && (form1.controls['passwordUp'].touched ||saveButton2)">
+              وارد کردن رمز عبور الزامی است
+            </p>
+          </div>
+          <div class="group">
+            <label for="pass1" class="label">تکرار رمز عبور</label>
+            <input id="pass1" type="password" class="input" (change)="checkPass()" [(ngModel)]="cPassword"
+                   name="cPassword" formControlName="cPassword"
+                   data-type="password">
+            <p style="color: red"
+               *ngIf="!form1.controls['cPassword'].valid && (form1.controls['cPassword'].touched ||saveButton2)">
+              وارد کردن نکرار رمز عبور الزامی است
+            </p>
+          </div>
+          <div class="text-center " style="padding-left: 40px">
+            <re-captcha class="reCaptcha2" theme="dark" (captchaResponse)="handleCorrectCaptcha($event)"
+                        site_key="6LezdksUAAAAACDzgmv7Lk_QZfx8SSz9XrO2mbzt"></re-captcha>
+          </div>
+          <div class="group text-center">
+            <button class="btn btn-block btn-round btn-hero-primary btn-sm" [disabled]="captcha==null"
+                    (click)="signUp()">ثبت نام
+            </button>
+
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" style="padding-top:1%; margin-right: 5%; margin-left: 5%;z-index: 9999999;">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="col-md-6 col-sm-12 col-xs-12" style="margin-right: 2.8%">
+      <div class="col-md-1 col-sm-1 col-xs-1 text-center " style="margin-right: 1%;z-index: 9999999;">
+        <div class="modal fade documentModal" id="forgetPassModal" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle"
+             style="z-index: 9999!important">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div *ngIf="mode=='setUserName'">
+                <div class="modal-header" style="background-color: #6a1b9a;color: white">
+
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+
+                  <p class="recovery" style="font-size: 22px">بازیابی رمز عبور</p>
+
+                </div>
+                <div class="modal-body" style="height: 220px;direction: rtl">
+                  <div>
+                    <div class="input-group input-group-sm text-center" style="margin-top: 5%">
+
+                      <div class="col-md-8">
+                        <input class="form-control"
+                               style="position: absolute;
+                          left: 30%!important;
+                           width: 180px!important;" [(ngModel)]="userPass.userName">
+                      </div>
+
+                      <div class="col-md-4">
+                        <label class="control-label" style="position: absolute; padding-top: 10%!important;
+                          left: 20%!important;font-size: 36px;">نام کاربری</label>
+                      </div>
+                    </div>
+
+                    <div class="row" style="text-align: left">
+                      <br>
+                      <button class="btn btn-default text-center" (click)="confirmUserName()"
+                              style="cursor: pointer; margin-top: 20%; margin-left: 23%">
+                        ارسال کد فعال سازی
+                      </button>
+
+                      <!--             <button class="btn btn-default signUp" (click)="goToMode()" style="cursor:pointer">عضویت رایگان در نت
+                                   </button>
+             -->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div *ngIf="mode=='activeCode'">
+                <div class="modal-header" style="background-color: #6a1b9a;color: white">
+
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+
+                  <p class="confirmPass" style="font-size: 22px">تایید کد فعال سازی</p>
+
+                </div>
+                <div class="modal-body" style="height: 300px">
+                  <div>
+                    <div class="input-group input-group-sm text-center" style="margin-top: 5%">
+
+
+                      <div class="col-md-8">
+                        <div class="input-group input-group-sm" style="padding-top: 8px; width: 60%; margin-right: 15%">
+                          <input class="form-control"  style="position: absolute;
+                          left: 30%!important;
+                           width: 180px!important;"
+                                 placeholder="کد فعالسازی" [(ngModel)]="verification" name="verification">
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <label class="control-label" style="position: absolute; padding-top: 10%!important;
+                          left: 20%!important;font-size: 36px;">کد فعال سازی</label>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="row" style="text-align: left ; padding-top: 1px;  margin-top: 75px; margin-left: 100px">
+                    <button class="btn btn-primary text-center btnConfirm" type="button" (click)="verificate()">
+                      ارسال کد فعال سازی
+                    </button>
+                  </div>
+                  <div class="row timer" *ngIf="timer!=0">
+                    <p style="margin-top: 20px;margin-left: 110px">پس از {{timer}}اگر کد فعال سازی را دریافت نکردید دوباره تلاش کنید</p>
+                  </div>
+                  <div *ngIf="timer==0">
+                    <p class="changeNum" style="cursor:pointer;" (click)="goToMode('setUserName')">بازگشت و درخواست
+                      مجدد</p>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="mode=='changePassword'">
+
+                <div class="modal-header" style="background-color: #6a1b9a;color: white">
+
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+
+                  <p class="newPass" style="font-size: 22px">تعریف رمز عبور جدید   </p>
+
+                </div>
+
+                <div class="modal-body" style="height: 150px">
+                  <div class="input-group mainActive">
+                    <input class="form-control" style="margin-left: 10px;" placeholder="رمز عبور جدید" [(ngModel)]="passwordNew">
+                  </div>
+                  <div class="row" style="text-align: left ; padding-top: 1px">
+                    <br>
+                    <button class="btn btn-primary text-center btnConfirm" type="button" (click)="setPassword()">
+
+                      ذخیره و ورود به حساب
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

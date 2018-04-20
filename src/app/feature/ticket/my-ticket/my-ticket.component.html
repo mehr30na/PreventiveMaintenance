@@ -1,0 +1,152 @@
+<nb-card>
+  <nb-card-header>
+    <div class="row">
+      <div class="col-md-4">
+      </div>
+      <div class="col-md-4 text-center">تیکت های من</div>
+      <div class="col-md-4">
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row">
+
+      <div class="col-md-12">
+        <p class="blink" style="font-size:12pt;text-align:center!important">با جابجا کردن تیکتها میتوانید وضعیت آنها را تغییر دهید</p>
+      </div>
+
+      <br>
+
+      <div class="col-md-6">
+        <nb-card droppable [dragOverClass]="'drag-target-border-green'" [dropScope]="['DOING' || 'TESTING']" [dragHintClass]="'drag-hint'"
+          (onDrop)="onTodoDrop($event)" style="background-color:#ff000042;">
+          <nb-card-header class="text-center">
+            <div>تیکت ها</div>
+          </nb-card-header>
+          <nb-card-body class="card-block scroll-list">
+            <!-- <div class="list-group"> -->
+            <li class="list-group-item ticket" [draggable] *ngFor="let item of todoTicket" [dragClass]="'active'" [dragData]="item" [dragScope]="item.ticketStatus"
+              [dragEnabled]="dragEnabled">
+              <div class="blur">
+                <img class="bgImage" [src]="myConfig.getUrl()+item.item.image.imageData" width="50vw">
+              </div>
+              <div class="ticketInfo">
+                <div class="row">
+                  <div class="col-sm-6 text-center"> کالا:</div>
+                  <div class="col-sm-6 text-center">{{item.item.name}}</div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6 text-center">عنوان:</div>
+                  <div class="col-sm-6 text-center">{{item.title}}</div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6 text-center">اولویت:</div>
+                  <div class="col-sm-6 text-center">{{item.item.priority}}</div>
+                </div>
+              </div>
+            </li>
+            <!-- </div> -->
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col-md-6">
+        <nb-card droppable [dragOverClass]="'drag-target-border-green'" [dropScope]="['TODO' || 'TESTING']" [dragHintClass]="'drag-hint'"
+          (onDrop)="onDoingDrop($event)" style="background-color:#ff73003a;">
+          <nb-card-header class="card-header card-inverse card-primary text-center">
+            <div>تیکت های درحال انجام</div>
+          </nb-card-header>
+          <nb-card-body class="card-block scroll-list">
+            <li *ngFor="let item of doingTicket" [draggable] class="list-group-item ticket" style="text-align: right" [dragClass]="'active'"
+              [dragData]="item" [dragScope]="item.ticketStatus" [dragEnabled]="dragEnabled">
+              <div class="blur">
+                <img class="bgImage" [src]="myConfig.getUrl()+item.item.image.imageData" width="50vw">
+              </div>
+              <div class="ticketInfo">
+                <div class="row">
+                  <div class="col-sm-6 text-center"> کالا:</div>
+                  <div class="col-sm-6 text-center">{{item.item.name}}</div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6 text-center">عنوان:</div>
+                  <div class="col-sm-6 text-center">{{item.title}}</div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6 text-center">اولویت:</div>
+                  <div class="col-sm-6 text-center">{{item.item.priority}}</div>
+                </div>
+              </div>
+            </li>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <nb-card droppable [dragOverClass]="'drag-target-border-green'" [dropScope]="['DOING' || 'TODO']" [dragHintClass]="'drag-hint'"
+          (onDrop)="onTestDrop($event)" style="background-color:#b3ff003b;">
+          <nb-card-header class="text-center">
+            <div>تیکت های انجام شده</div>
+          </nb-card-header>
+          <nb-card-body class="card-block scroll-list">
+            <!-- <div class="list-group"> -->
+            <li class="list-group-item ticket" [draggable] *ngFor="let item of testTicket" style="text-align: right" [dragClass]="'active'"
+              [dragData]="item" [dragScope]="item.ticketStatus" [dragEnabled]="dragEnabled">
+              <div class="blur">
+                <img class="bgImage" [src]="myConfig.getUrl()+item.item.image.imageData" width="50vw">
+              </div>
+              <div class="ticketInfo">
+                <div class="row">
+                  <div class="col-sm-6 text-center"> کالا:</div>
+                  <div class="col-sm-6 text-center">{{item.item.name}}</div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6 text-center">عنوان:</div>
+                  <div class="col-sm-6 text-center">{{item.title}}</div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6 text-center">اولویت:</div>
+                  <div class="col-sm-6 text-center">{{item.item.priority}}</div>
+                </div>
+              </div>
+            </li>
+            <!-- </div> -->
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col-md-6">
+        <nb-card droppable [dragOverClass]="'drag-target-border-green'" [dropScope]="'TESTING'" [dragHintClass]="'drag-hint'" (onDrop)="onDoneDrop($event)"
+          style="background-color:#00ff2a3b;">
+          <nb-card-header class="card-header card-inverse card-primary text-center">
+            <div>تیکت های تایید شده</div>
+          </nb-card-header>
+          <nb-card-body class="card-block scroll-list">
+            <li *ngFor="let item of doneTicket" [draggable] class="list-group-item ticket" style="text-align: right" [dragClass]="'active'"
+              [dragData]="item" [dragScope]="item.ticketStatus" [dragEnabled]="false">
+              <div class="blur">
+                <img class="bgImage" [src]="myConfig.getUrl()+item.item.image.imageData" width="50vw">
+              </div>
+              <div class="ticketInfo">
+                <div class="row">
+                  <div class="col-sm-6 text-center"> کالا:</div>
+                  <div class="col-sm-6 text-center">{{item.item.name}}</div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6 text-center">عنوان:</div>
+                  <div class="col-sm-6 text-center">{{item.title}}</div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6 text-center">اولویت:</div>
+                  <div class="col-sm-6 text-center">{{item.item.priority}}</div>
+                </div>
+              </div>
+            </li>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+
+  </nb-card-body>
+  <nb-card-footer>
+
+  </nb-card-footer>
+</nb-card>

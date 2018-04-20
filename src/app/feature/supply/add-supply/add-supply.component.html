@@ -1,0 +1,449 @@
+<nb-card>
+  <nb-card-header>
+    <i (click)="addBOM()" class="fa fa-plus-circle float-left" style="font-size:3vw;color:green"></i>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col col-md-2 text-center" style="margin-top: 5vh">
+        <!--<img src="../../../../assets/images/location.jpg" alt="noImage" height="120" width="100%">-->
+        <nb-card>
+          <nb-card-body>
+            <img *ngIf="!part.image.imageData" src="../../../../assets/images/location.jpg"
+                 height="120" width="100%" alt="noImage">
+            <img *ngIf="part.image.imageData" src="{{part.image.imageData}}" width="100%" height="120">
+          </nb-card-body>
+          <nb-card-footer style="text-align: center;height: 10vh;background-color: #1b567c">
+            <label>
+              <a style="color: white;cursor: pointer"><b>انتخاب تصویر </b>
+              </a>
+              <input id="custom-input" type="file" style="display: none;"
+                     (change)="fileChangeListener($event)">
+            </label>
+          </nb-card-footer>
+        </nb-card>
+        <br>
+        <!--<label style="color: green">فعال</label>-->
+        <!--<br>-->
+        <!--<label style="color: #990000">غیر فعال</label>-->
+        <!--<br>-->
+        <!--<label class="switch">-->
+        <!--<input type="checkbox" checked>-->
+        <!--<span class="slider round"></span>-->
+        <!--</label>-->
+      </div>
+      <div class="col col-md-4 text-center">
+        <div class="row">
+          <label class="control-label"> نام قطعه جدید </label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="نام" [(ngModel)]="part.name" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label"> توضیحات </label>
+          <div class="input-group input-group-sm">
+            <textarea type="text" placeholder="توضیحاتی در مورد قطعه جدید" [(ngModel)]="part.description" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">کد قطعه جدید</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="کد" class="form-control" [(ngModel)]="part.code">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex flex-row mt-2">
+      <ul class="nav nav-tabs nav-tabs--vertical nav-tabs--left" role="navigation" style="text-align: right">
+        <li class="nav-item">
+          <a href="#stockBOM" class="nav-link active" data-toggle="tab" role="tab" aria-controls="stockBOM">موجودی</a>
+        </li>
+        <li class="nav-item">
+          <a href="#BOMBOM" class="nav-link" data-toggle="tab" role="tab" aria-controls="BOMBOM">زیر قطعات</a>
+        </li>
+        <li class="nav-item">
+          <a href="#personelBOM" class="nav-link" data-toggle="tab" role="tab" aria-controls="personelBOM">پرسنل</a>
+        </li>
+        <li class="nav-item">
+          <a href="#meteringBOM" class="nav-link" data-toggle="tab" role="tab" aria-controls="meteringBOM">کارکرد</a>
+        </li>
+        <li class="nav-item">
+          <a href="#warantyBOM" class="nav-link" data-toggle="tab" role="tab" aria-controls="warantyBOM">گارانتی</a>
+        </li>
+        <li class="nav-item">
+          <a href="#fileBOM" class="nav-link" data-toggle="tab" role="tab" aria-controls="fileBOM">اپلود فایل</a>
+        </li>
+        <li class="nav-item">
+          <a href="#logBOM" class="nav-link" data-toggle="tab" role="tab" aria-controls="logBOM">اطلاعات</a>
+        </li>
+      </ul>
+
+
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="stockBOM" role="tabpanel">
+          <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col col-md-4 text-center">
+              <div class="row">
+                <label class="control-label"> مقدار موجودی </label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="مقدار موجودی که داریم" [(ngModel)]="part.quantity" class="form-control">
+                </div>
+              </div>
+              <div class="row">
+                <label class="control-label"> حداقل موجودی</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="حداقل موجودی که باید داشته باشیم" [(ngModel)]="part.minQuantity" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2 text-right" style=" margin-top: 2vh;">
+              <label class="control-label"> راهرو</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="راهرو" class="form-control">
+              </div>
+            </div>
+            <div class="col-md-2 text-right" style=" margin-top: 2vh;">
+              <label class="control-label"> صف</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="صف" class="form-control">
+              </div>
+            </div>
+            <div class="col-md-2 text-right" style=" margin-top: 2vh;">
+              <label class="control-label"> انبارک</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="انبارک" class="form-control">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="row">
+                <div class="col-md-10" style="text-align: right">
+                  <label class="control-label">بودجه تخصیص یافته</label>
+                  <select class="form-control"
+                          style="width: 100%;padding: 0px" dir="rtl"
+                          class="js-example-basic-single accountBOM">
+                    <option *ngFor="let item of accountList" [value]="item.id">{{item.name}}</option>
+                  </select>
+                </div>
+                <div class="col-md-2" style="margin-top: 5vh">
+                   <span>
+                     <i class="fa fa-plus " style="color: green" (click)="showAccountDialog()"></i>
+                   </span>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row">
+                <div class="col-md-10" style="text-align: right">
+                  <label class="control-label">مسئول تعمیرات</label>
+                  <select class="form-control"
+                          style="width: 100%;padding: 0px" dir="rtl"
+                          class="js-example-basic-single chargeDepartmentBOM">
+                    <option *ngFor="let item of chargeDepartmentList" [value]="item.id">{{item.code}}</option>
+                  </select>
+                </div>
+                <div class="col-md-2" style="margin-top: 5vh">
+                    <span>
+                      <i class="fa fa-plus " style="color: green" (click)="showChargeDepartmentDialog()"></i>
+                    </span>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-md-4 text-right">
+              <label class="control-label "> مدل دستگاه</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="مدل دستگاه" [(ngModel)]="part.brand" class="form-control">
+              </div>
+            </div>
+            <div class="col col-md-4 text-right">
+              <label class="control-label"> آخرین قیمت</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="آخرین قیمت خرداری شده" [(ngModel)]="part.lastPrice" class="form-control">
+              </div>
+            </div>
+            <div class="col col-md-4 text-right">
+              <label class="control-label"> کد موجودی</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder=" کد موجودی" [(ngModel)]="part.inventoryCode" class="form-control">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-md-12 text-right">
+              <label class="control-label"> یادداشت ها </label>
+              <div class="input-group input-group-sm">
+                <textarea type="text" placeholder="یادداشت های مربوط به قطعه" [(ngModel)]="part.note" class="form-control"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="BOMBOM" role="tabpanel">
+          <!--<button (click)="Show2=true">sdfdsfsdf</button>-->
+          <!--<ng-container *ngIf="Show2==true">-->
+
+          <!--<bom-add-form [Show]="Show2"></bom-add-form>-->
+          <!--</ng-container>-->
+        </div>
+        <div class="tab-pane fade" id="personelBOM" role="tabpanel">
+          <h1>personel</h1>
+
+        </div>
+        <div class="tab-pane fade" id="meteringBOM" role="tabpanel">
+          <nb-card>
+            <nb-card-body>
+              <table class="table" style="border-radius: 4px;">
+                <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                <tr>
+                  <td>ردیف</td>
+                  <td>عنوان</td>
+                  <td>کارکرد</td>
+                  <td>واحد</td>
+                  <td>حذف</td>
+                </tr>
+                </thead>
+                <tbody style="text-align: right">
+                <tr *ngFor="let item of part.meterings;let i = index">
+                  ‍<td>{{i+1}}</td>
+                  <td>{{item.name}}</td>
+                  <td>{{item.amount}}</td>
+                  <td>{{item.unit.name}}</td>
+                  <td>
+                    <a class="btnRemove" (click)="deleteMetering(item.id,i)" style="cursor: pointer;color: red">
+                      <i class="nb-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </nb-card-body>
+
+            <nb-card-footer>
+              <i class="fa fa-plus-circle fa-3x" (click)="showMeteringAddFormBOM()">
+              </i>
+            </nb-card-footer>
+          </nb-card>
+
+        </div>
+        <div class="tab-pane fade" id="warantyBOM" role="tabpanel">
+          <nb-card>
+            <nb-card-body>
+              <table class="table" style="border-radius: 4px;">
+                <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                <tr>
+                  <td>ردیف</td>
+                  <td>نام شرکت</td>
+                  <td>نوع گارانتی</td>
+                  <td>زمان پایان</td>
+                  <td>حذف</td>
+                </tr>
+                </thead>
+                <tbody style="text-align: right">
+                <tr *ngFor="let item of part.warranties;let i = index">
+                  ‍<td>{{i+1}}</td>
+                  <td>{{item.companyName}}</td>
+                  <td>{{item.timeType}}</td>
+                  <td>{{item.expiry}}</td>
+                  <td>
+                    <a class="btnRemove" (click)="deleteWarranty(item.id,i)" style="cursor: pointer;color: red">
+                      <i class="nb-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </nb-card-body>
+
+            <nb-card-footer>
+              <i class="fa fa-plus-circle fa-3x" (click)="showMeteringAddForm()">
+              </i>
+            </nb-card-footer>
+          </nb-card>
+        </div>
+        <div class="tab-pane fade" id="fileBOM" role="tabpanel">
+          <nb-card>
+            <nb-card-body>
+              <table class="table" style="border-radius: 4px;">
+                <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                <tr>
+                  <td>ردیف</td>
+                  <td>نام فایل</td>
+                  <td>نوع فایل</td>
+                  <td>حذف</td>
+                </tr>
+                </thead>
+                <tbody style="text-align: right">
+                <tr *ngFor="let item of part.documents;let i = index">
+                  ‍<td>{{i+1}}</td>
+                  <td>{{item.name}}</td>
+                  <td>{{item.contentType}}</td>
+                  <td>
+                    <a class="btnRemove" (click)="del(item.id,i)" style="cursor: pointer;color: red">
+                      <i class="nb-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+
+                </tbody>
+
+              </table>
+            </nb-card-body>
+            <!--</div>-->
+
+            <nb-card-footer>
+              <div style="width: 100%;
+    text-align: left;
+    margin-top: 20px;" class="text-center">
+
+                <div class=" text-right myShadow" id="attachment">
+
+                  <div class="text-center">
+                    <label *ngIf="appdisabled===1" class=" " style="width: 180px;
+    height: 30px; margin: 5px 5px 10px 10px; text-align: center">
+                      <a class="btn btn-round btn-hero-success" style="color: white;
+    font-size: 14px;"> انتخاب فایلها
+                        <i class="fa fa-paperclip " aria-hidden="true" style="font-size: larger"></i>
+                      </a>
+                      <input type="file" style="display: none;" multiple [disabled]="appdisabled===0"
+                             (change)="onChangeUploader(input,$event)"
+                             #input>
+                    </label>
+                  </div>
+                  <div class="text-center" *ngIf="appdisabled===0">
+                    <label style="cursor: not-allowed; width: 180px;
+    height: 50px;">
+                      <a style="   color: white;
+    font-size: 11px;" class="btn btn-round btn-hero-success">
+                        <i class="fa fa-spinner fa-spin fa-3x"></i>در حال آپلود
+                      </a>
+                      <input type="file" style="display: none;" multiple [disabled]="appdisabled===0"
+                             (change)="onChangeUploader(input,$event)"
+                             #input>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </nb-card-footer>
+          </nb-card>
+
+
+        </div>
+        <div class="tab-pane fade" id="logBOM" role="tabpanel">
+          <nb-card>
+            <nb-card-body>
+              <table class="table" style="border-radius: 4px;">
+                <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                <tr>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>3</td>
+                  <td>4</td>
+                  <td>5</td>
+                </tr>
+                </thead>
+                <tbody>
+
+
+                </tbody>
+
+              </table>
+            </nb-card-body>
+          </nb-card>
+
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+<app-dialog [(visible)]="showAccountModalBOM" [title]="'بخش افزودن بودجه خرید'" style="direction: rtl">
+  <div class="row" style="text-align: right">
+    <div class="col-md-6">
+      <label class="control-label">عنوان بودجه</label>
+      <div class="input-group input-group-sm">
+        <input type="text" placeholder="عنوان بودجه" [(ngModel)]="account.name" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label class="control-label"> توضیحات </label>
+      <div class="input-group input-group-sm">
+                              <textarea type="text" [(ngModel)]="account.description"
+                                        placeholder="در این بخش توضیحات در مورد بودجه تخصیص یافته را مطرح میکنید"
+                                        class="form-control"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="row text-center" style="margin-top: 5vh">
+    <div class="col col-md-12">
+      <button class="btn btn-hero-success" (click)="createAccount()">ثبت بودجه</button>
+    </div>
+  </div>
+</app-dialog>
+
+
+<app-dialog [(visible)]="showChargeDepartmentModalBOM" [title]="'بخش افزودن مسئول تعمیرات و نگهداری'"
+            style="direction: rtl">
+  <div class="row" style="text-align: right">
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <label class="control-label">کد بخش</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="کد بخش" [(ngModel)]="chargeDepartment.code" class="form-control">
+          </div>
+        </div>
+        <div class="col-md-12">
+          <label class="control-label"> توضیحات </label>
+          <div class="input-group input-group-sm">
+                              <textarea type="text" [(ngModel)]="chargeDepartment.description"
+                                        placeholder="در این بخش توضیحات در مورد بخش مسئول تعمیرات و نگهداری را مطرح میکنید"
+                                        class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row" style="margin-top: 0vh!important;">
+            <div class="col-md-10" style="text-align: right">
+              <label class="control-label">مسئول تعمیرات</label>
+              <select class="form-control"
+                      style="width: 100%;padding: 0px" dir="rtl"
+                      class="js-example-basic-single chargeDepartmentLocationBOM">
+                <option *ngFor="let item of assetListChargeDepartmentBOM" [value]="item.id">{{item.name}}</option>
+              </select>
+            </div>
+            <div class="col-md-2" style="margin-top: 5vh">
+               <span>
+                 <i class="fa fa-plus " style="color: green"></i>
+               </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-3">
+
+    </div>
+  </div>
+  <div class="row text-center" style="margin-top: 5vh">
+    <div class="col col-md-12">
+      <button class="btn btn-hero-success" (click)="createChargeDepartment()">ثبت مسئول تعمیرات</button>
+    </div>
+  </div>
+</app-dialog>
+
+
+<app-dialog [(visible)]="meteringAddBOM" [title]="'بخش افزودن کارکرد زیرقطعه'" style="direction: rtl">
+  <metering-add-form *ngIf="meteringAddBOM" [target]="'part'"></metering-add-form>
+</app-dialog>
+
+<app-dialog [(visible)]="warrantyAddModalBOM" [title]="'بخش افزودن گارانتی'" style="direction: rtl">
+  <warranty-add-form *ngIf="warrantyAddModalBOM" [target]="'part'"></warranty-add-form>
+</app-dialog>

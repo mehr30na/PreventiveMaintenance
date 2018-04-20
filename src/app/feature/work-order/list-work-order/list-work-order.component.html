@@ -1,0 +1,24 @@
+<nb-card>
+    <nb-card-header class="text-center">
+      <h3>لیست دارایی ها
+        <i (click)="goToAddWO()" class="fa fa-plus-circle float-left" style="font-size:3vw;color:green"></i>
+      </h3>
+    </nb-card-header>
+  
+    <nb-card-body>
+  
+      <div class="ui-rtl" dir="rtl">
+        <p-treeTable [value]="files" selectionMode="single" (onNodeSelect)="nodeSelect($event)" class="ui-rtl" dir="rtl">
+          <p-header>لیست دارایی ها</p-header>
+          <p-footer>یک مورد از لیست انتخاب کنید</p-footer>
+          <p-column field="code" header="کد"></p-column>
+          <p-column field="title" header="عنوان"></p-column>
+          <p-column field="accountTitle" header="بودجه"></p-column>
+          <p-column field="chTitle" header="بخش تعمیرات"></p-column>
+  
+        </p-treeTable>
+  
+      </div>
+  
+  
+    </nb-card-body>

@@ -1,0 +1,108 @@
+
+
+@font-face {
+  font-family: IRANSans-web;
+  font-style: normal;
+  font-weight: normal;
+  src: url('../../../assets/fonts/IRANSansWeb.eot');
+  src: url('../../../assets/fonts/IRANSansWeb.eot?#iefix') format('embedded-opentype'),
+  url('../../../assets/fonts/IRANSansWeb.woff2') format('woff2'),
+  url('../../../assets/fonts/IRANSansWeb.woff') format('woff'),
+  url('../../../assets/fonts/IRANSansWeb.ttf') format('truetype');
+}
+* {
+  direction: ltr;
+  /*font-family: yekan;*/
+}
+
+body,div,table,label,button,span,p,legend,input,h2,h3 {
+  font-family: IRANSans-web !important;
+  text-decoration: none;
+}
+
+button {
+  width: 15vw;
+}
+
+.form-group.required .control-label:after {
+  color: #d00;
+  content: "*";
+  position: relative;
+  margin-left: 3px;
+  top:2px;
+}
+.control-label{
+  font-size: 13px!important;
+}
+
+// themes - our custom or/and out of the box themes
+@import 'themes';
+
+// framework component themes (styles tied to theme variables)
+@import '~@nebular/theme/styles/globals';
+@import '~@nebular/auth/styles/all';
+
+// loading progress bar theme
+@import './pace.theme';
+
+// install the framework and custom global styles
+@include nb-install() {
+
+  // framework global styles
+  @include nb-theme-global();
+  @include nb-auth-global();
+
+  // loading progress bar
+  @include ngx-pace-theme();
+};
+input{
+  height: 30px;
+  text-align: right!important;
+}
+select {
+  height: 30px!important;
+  //font-size: 14px!important;
+  text-align: right!important;
+  padding: 0rem!important;
+}
+option {
+  //font-size: 14px!important;
+  text-align: right!important;
+}
+.nb-theme-default .input-group-addon, .nb-theme-default .form-control{
+
+}
+p {
+  text-align: right!important;
+  font-size: 12px;
+}
+.control-label {
+ //margin-left: 50%!important;
+
+}
+.menu-title {
+  flex:1;
+  text-align:center!important;
+}
+.menu-group {
+  text-align:right!important;
+}
+
+.blink {
+  animation: blinker 5s linear infinite;
+  color:rgb(255, 0, 0);
+}
+
+@keyframes blinker {
+  50% { opacity: 0; }
+}
+
+@media screen and (max-width:480px){
+  button {
+    width: 100%;
+  }
+  .ticket{
+    width: 20vw;
+    height: 20vw;
+  }
+}

@@ -1,0 +1,145 @@
+<nb-card *ngIf="mode==''">
+  <nb-card-header>
+    <div class="row">
+      <div class="col-md-4">
+          <button class="btn btn-hero-success" style="margin: 4px" (click)="add()">افزودن منبع خرید</button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">لیست منابع خرید</div>
+      <div class="col-md-4"></div>
+    </div>
+  </nb-card-header>
+  <nb-card-body style="direction: rtl!important;">
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+      <tr>
+        <th class="text-center" style="width: 4%">ردیف</th>
+        <th class="text-center" style="width: 22%">نام واحد خرید</th>
+        <th class="text-center" style="width: 44%">آدرس</th>
+        <th class="text-center" style="width: 22%">شماره تلفن</th>
+        <th class="text-center" style="width: 4%">ویرایش</th>
+        <th class="text-center" style="width: 4%">حذف</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr *ngFor="let item of purchasingResourcesList;let i =index">
+        <td class="text-center">{{i+1}}</td>
+        <td class="text-center">{{item.name}}</td>
+        <td class="text-center">{{item.contact.address}}</td>
+        <td class="text-center">{{item.contact.phoneNumber}}</td>
+        <td class="text-center">
+          <a (click)="editPurchasingResources(item.id)" style="cursor: pointer;color: green">
+            <i class="nb-edit"></i>
+          </a>
+        </td>
+        <td class="text-center">
+          <a class="btnRemove" (click)="deletePurchasingResources(item.id,i)" style="cursor: pointer;color: red">
+            <i class="nb-trash"></i>
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </nb-card-body>
+  <nb-card-footer>
+
+  </nb-card-footer>
+</nb-card>
+<nb-card *ngIf="(mode=='add') || (mode=='edit')">
+  <nb-card-header>
+    <div class="row" *ngIf="mode=='add'">
+      <div class="col-md-4">
+          <button class="btn btn-hero-danger" style="margin: 4px;" (click)="cancel()">
+              انصراف
+            </button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">اضافه کردن منبع خرید</div>
+      <div class="col-md-4 pull-left"></div>
+      <!--<div class="col-md-4"><a class="pull-right" routerLink="/management/userManagement/listRole">لیست نقش</a></div>-->
+    </div>
+
+    <div class="row" *ngIf="mode=='edit'">
+      <div class="col-md-4">
+          <button class="btn btn-hero-danger" style="margin: 4px;" (click)="cancel()">
+              انصراف
+            </button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">ویرایش کردن منبع خرید</div>
+      <div class="col-md-4 pull-left"></div>
+      <!--<div class="col-md-4"><a class="pull-right" routerLink="/management/userManagement/listRole">لیست نقش</a></div>-->
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div *ngIf="mode=='add'">
+      <div class="row">
+        <div class="col-md-4 form-group required text-center">
+          <label class="control-label">عنوان واحد خرید </label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="عنوان واحد خرید" class="form-control"
+                   [(ngModel)]="purchasingResources.name">
+          </div>
+          <p style="color:red">{{myVal.checkFa(purchasingResources.name)}}</p>
+        </div>
+        <div class="col-md-4 form-group required text-center">
+          <label class="control-label">آدرس </label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="آدرس" class="form-control"
+                   [(ngModel)]="purchasingResources.contact.address">
+          </div>
+          <p style="color:red">{{myVal.checkFa(purchasingResources.contact.address)}}</p>
+        </div>
+        <div class="col-md-4 form-group required text-center">
+          <label class="control-label">شماره تلفن </label>
+          <div class="input-group input-group-sm">
+            <input type="text" maxlength="11" placeholder="شماره تلفن" class="form-control"
+                   [(ngModel)]="purchasingResources.contact.phoneNumber">
+          </div>
+          <p style="color:red">{{myVal.checkEnNumber(purchasingResources.contact.phoneNumber)}}</p>
+        </div>
+
+
+      </div>
+    </div>
+    <div *ngIf="mode=='edit'">
+      <div class="row">
+        <div class="col-md-4 text-center">
+          <label class="control-label">عنوان واحد خرید </label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="عنوان واحد خرید" class="form-control"
+                   [(ngModel)]="purchasingResourcesEdit.name">
+          </div>
+        </div>
+        <div class="col-md-4 text-center">
+          <label class="control-label">آدرس </label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="آدرس" class="form-control"
+                   [(ngModel)]="purchasingResourcesEdit.contact.address">
+          </div>
+        </div>
+        <div class="col-md-4 text-center">
+          <label class="control-label">شماره تلفن </label>
+          <div class="input-group input-group-sm">
+            <input type="text" maxlength="10" placeholder="شماره تلفن " class="form-control"
+                   [(ngModel)]="purchasingResourcesEdit.contact.phoneNumber">
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </nb-card-body>
+  <nb-card-footer>
+    <div style="text-align: center!important;" *ngIf="mode=='add'">
+      <button type="submit" class="btn btn-primary" [disabled]="myVal.checkFa(purchasingResources.name) !='' ||
+                                                                myVal.checkFa(purchasingResources.contact.address) !='' ||
+                                                                myVal.checkNumber(purchasingResources.contact.phoneNumber) !=''"  (click)="addPurchasingResources()">ثبت</button>
+    </div>
+    <div style="text-align: center!important;" *ngIf="mode=='edit'">
+      <button type="submit" class="btn btn-primary" (click)="updatePurchasingResources()">ویرایش</button>
+    </div>
+  </nb-card-footer>
+</nb-card>
+
+

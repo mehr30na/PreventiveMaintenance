@@ -1,0 +1,140 @@
+<nb-card>
+  <nb-card-header style="text-align:center">
+    <div text-center>
+      مشخصات کاربر
+    </div>
+  </nb-card-header>
+  <nb-card-body style="text-align: right!important;">
+
+    <div class="container">
+      <div class="row">
+
+        <div class="col-md-12">
+          <div class="card hovercard">
+            <div class="card-background">
+              <img class="card-bkimg" alt="" [src]="image">
+            </div>
+            <div class="useravatar">
+              <img alt="" [src]="image">
+            </div>
+            <div class="card-info">
+              <span class="card-title">{{user.name}}&nbsp;{{user.family}}</span><br><br>
+              <span class="card-title">{{user.userType.role}}</span>
+            </div>
+          </div>
+          <table class="table table-striped table-hover">
+            <tbody>
+              <tr>
+                <td class="title">نام:</td>
+                <td class="content">{{user.name}}</td>
+              </tr>
+              <tr>
+                <td class="title">نام خانوادگی:</td>
+                <td class="content">{{user.family}}</td>
+              </tr>
+              <tr>
+                <td class="title">نام کاربری:</td>
+                <td class="content">{{user.userName}}</td>
+              </tr>
+              <tr>
+                <td class="title">نام پدر:</td>
+                <td class="content">{{user.fatherName}}</td>
+              </tr>
+              <tr>
+                <td class="title">شماره تلفن:</td>
+                <td class="content">{{user.userContact.phoneNumber}}</td>
+              </tr>
+              <tr>
+                <td class="title">ایمیل:</td>
+                <td class="content">{{user.userContact.email}}</td>
+              </tr>
+              <tr>
+                <td class="title">تلگرام:</td>
+                <td class="content">{{user.userContact.telegramId}}</td>
+              </tr>
+              <tr>
+                <td class="title">آدرس:</td>
+                <td class="content">{{user.userContact.address}}</td>
+              </tr>
+              <tr>
+                <td class="title">کد ملی:</td>
+                <td class="content">{{user.nationalCode}}</td>
+              </tr>
+
+              <tr>
+                <td class="title">سطح دسترسی:</td>
+                <td class="content">{{user.userType.role}}</td>
+              </tr>
+              <tr>
+                <td class="title">سازمان:</td>
+                <td class="content">{{user.organization.name}}</td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+        <!-- <div class="col col-md-8">
+          <table class="table table-responsive ">
+            <tbody>
+            <tr>
+              <td class="name">نام:</td>
+              <td class="content">{{user.name}}</td>
+            </tr>
+            <tr>
+              <td class="name">نام خانوادگی:</td>
+              <td class="content">{{user.family}}</td>
+            </tr>
+            <tr>
+              <td class="name">نام کاربری:</td>
+              <td class="content">{{user.userName}}</td>
+            </tr>
+            <tr>
+              <td class="name">نام پدر:</td>
+              <td class="content">{{user.fatherName}}</td>
+            </tr>
+            <tr>
+              <td class="name">شماره تلفن:</td>
+              <td class="content">{{user.userContact.phoneNumber}}</td>
+            </tr>
+            <tr>
+              <td class="name">ایمیل:</td>
+              <td class="content">{{user.userContact.email}}</td>
+            </tr>
+            <tr>
+              <td class="name">تلگرام:</td>
+              <td class="content">{{user.userContact.telegramId}}</td>
+            </tr>
+            <tr>
+              <td class="name">آدرس:</td>
+              <td class="content">{{user.userContact.address}}</td>
+            </tr>
+            <tr>
+              <td class="name">کد ملی:</td>
+              <td class="content">{{user.nationalCode}}</td>
+            </tr>
+
+            <tr>
+              <td class="name">سطح دسترسی:</td>
+              <td class="content">{{user.userType.role}}</td>
+            </tr>
+            <tr>
+              <td class="name">سازمان:</td>
+              <td class="content">{{user.organization.name}}</td>
+            </tr>
+            <tr>
+              <td class="name">عکس پروفایل:</td>
+              <td class="content"><img [src]="image" style="width: 80px;height: 80px"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col col-md-4"> -->
+
+
+        <!-- </div> -->
+      </div>
+    </div>
+
+  </nb-card-body>
+</nb-card>

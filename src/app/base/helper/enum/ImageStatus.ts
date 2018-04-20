@@ -1,0 +1,7 @@
+export enum ImageStatus {
+  WITHOUT_IMAGE = <any>'WITHOUT_IMAGE',
+  NEW_IMAGE = <any>'NEW_IMAGE',
+  UPDATE_IMAGE = <any>'UPDATE_IMAGE',
+  SAVED_IMAGE = <any>'SAVED_IMAGE',
+  DELETE_IMEGE = <any>'DELETE_IMAGE'
+}

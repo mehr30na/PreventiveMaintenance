@@ -1,0 +1,111 @@
+<nb-card>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-4 text-right">
+        <div class="row" style="margin-top: 0vh!important;">
+          <div class="col-md-10" style="text-align: right">
+            <label class="control-label">خریداری شده از</label>
+            <select class="form-control"
+                    style="width: 100%;padding: 0px" dir="rtl"
+                    class="js-example-basic-single purchaseBusinessList">
+              <option *ngFor="let item of purchaseBusinessList" [value]="item.id">{{item.company.name}}</option>
+            </select>
+          </div>
+          <div class="col-md-2" style="margin-top: 5vh">
+               <span>
+                 <i class="fa fa-plus " style="color: green" (click)="showBusinessAddForm()"></i>
+               </span>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 text-right">
+        <div class="row" style="margin-top: 0vh!important;">
+          <div class="col-md-10" style="text-align: right">
+            <label class="control-label">واحد پول</label>
+            <select class="form-control"
+                    style="width: 100%;padding: 0px" dir="rtl"
+                    class="js-example-basic-single purchaseCurrencyList">
+              <option *ngFor="let item of currencyList" [value]="item.id"></option>
+            </select>
+          </div>
+          <div class="col-md-2" style="margin-top: 5vh">
+               <span>
+                 <i class="fa fa-plus " style="color: green" (click)="showCurrencyAddForm()"></i>
+               </span>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-4 text-right">
+        <label class="control-label ">زمان خریداری شده</label>
+        <dp-date-picker
+          dir="rtl"
+          mode="day"
+          [(ngModel)]="date1"
+          placeholder="تاریخ"
+          theme="dp-material">
+        </dp-date-picker>
+      </div>
+      <div class="col-md-4 text-right">
+        <label class="control-label ">زمان تحویل کالا</label>
+        <dp-date-picker
+          dir="rtl"
+          [(ngModel)]="date2"
+          mode="day"
+          placeholder="تاریخ"
+          theme="dp-material">
+        </dp-date-picker>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-4 text-right">
+        <label class="control-label"> قیمت کالا </label>
+        <div class="input-group input-group-sm">
+          <input type="text" placeholder="قیمت کالا" [(ngModel)]="purchase.price" class="form-control">
+        </div>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+    <div class="row text-center" style="margin-top: 5vh">
+      <div class="col col-md-12">
+      <button class="btn btn-hero-success" (click)="createPurchase()">ثبت خرید</button>
+    </div>
+    </div>
+
+  </nb-card-body>
+</nb-card>
+<app-dialog [(visible)]="purchaseBusinessAddModal" [title]="'بخش افزودن شرکت'" style="direction: rtl">
+  <business-add-form *ngIf="purchaseBusinessAddModal"></business-add-form>
+</app-dialog>
+<app-dialog [(visible)]="purchaseCurrencyAddModal" [title]="'بخش افزودن واحد پول'" style="direction: rtl">
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-4 text-right">
+      <label class="control-label"> عنوان واحد پول </label>
+      <div class="input-group input-group-sm">
+        <input type="text" placeholder="عنوان" [(ngModel)]="currency.name" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-4 text-right">
+      <label class="control-label"> نماد واحد پول</label>
+      <div class="input-group input-group-sm">
+        <input type="text" placeholder=" نماد " [(ngModel)]="currency.isoCode" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+  <div class="row text-center" style="margin-top: 5vh">
+    <div class="col col-md-12">
+    <button class="btn btn-hero-success" (click)="createCurrency()">ثبت واحد پول</button>
+
+    </div>
+  </div>
+</app-dialog>

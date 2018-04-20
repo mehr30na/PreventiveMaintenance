@@ -1,0 +1,814 @@
+<nb-card>
+  <nb-card-header>
+    <i (click)="addAsset()" class="fa fa-plus-circle float-left" style="font-size:3vw;color:green"></i>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col col-md-2 text-center" style="margin-top: 5vh">
+        <!--<img src="../../../../assets/images/location.jpg" alt="noImage" height="120" width="100%">-->
+        <nb-card>
+          <nb-card-body>
+            <img *ngIf="!asset.image.imageData" src="../../../../assets/images/location.jpg"
+                 height="120" width="100%" alt="noImage">
+            <img *ngIf="asset.image.imageData" src="{{asset.image.imageData}}" width="100%" height="120">
+          </nb-card-body>
+          <nb-card-footer style="text-align: center;height: 10vh;background-color: #1b567c">
+            <label>
+              <a style="color: white;cursor: pointer"><b>انتخاب تصویر </b>
+              </a>
+              <input id="custom-input" type="file" style="display: none;"
+                     (change)="fileChangeListener($event)">
+            </label>
+          </nb-card-footer>
+        </nb-card>
+        <br>
+        <label style="color: green" *ngIf="asset.status">فعال</label>
+        <br>
+        <label style="color: #990000" *ngIf="!asset.status">غیر فعال</label>
+        <br>
+        <label class="switch">
+          <input type="checkbox" (change)="changeAssetStatus($event)">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div class="col col-md-4 text-center">
+        <div class="row">
+          <label class="control-label"> نام دارایی </label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="نام دارایی" [(ngModel)]="asset.name" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label"> توضیحاتی در مورد دارایی </label>
+          <div class="input-group input-group-sm">
+            <textarea type="text" placeholder="توضیحات" [(ngModel)]="asset.description" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">کد دارایی</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="کد دارایی"  [(ngModel)]="asset.code" class="form-control">
+          </div>
+          <!--<div id="assetCode"></div>-->
+        </div>
+        <div class="row">
+          <label class="control-label">دسته بندی</label>
+          <select class="form-control"
+                  style="width: 100%;padding: 0px" dir="rtl"
+                  class="js-example-basic-single sub-categoryList">
+            <option [value]="category.id">{{category.persianName}}</option>
+            <option *ngFor="let item of categoryList" [value]="item.id">{{item.persianName}}</option>
+          </select>
+        </div>
+      </div>
+      <!--<div class="col-md-2 text-center">-->
+      <!--<div class="row">-->
+      <!--<label class="control-label">وضعیت دارایی</label>-->
+      <!---->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</div>-->
+    </div>
+
+
+    <nb-card style="margin-top: 5vh">
+      <nb-card-body>
+        <div class="d-flex flex-row mt-2">
+          <ul class="nav nav-tabs nav-tabs--vertical nav-tabs--left" role="navigation" style="text-align: right">
+            <li class="nav-item">
+              <a href="#general" class="nav-link active" data-toggle="tab" role="tab" aria-controls="general">عمومی</a>
+            </li>
+            <li class="nav-item">
+              <a href="#BOM" class="nav-link" data-toggle="tab" role="tab" aria-controls="BOM">زیر قطعات</a>
+            </li>
+            <li class="nav-item">
+              <a href="#property" class="nav-link" data-toggle="tab" role="tab" aria-controls="property">ویژگی ها
+                </a>
+            </li>
+            <li class="nav-item">
+              <a href="#personel" class="nav-link" data-toggle="tab" role="tab" aria-controls="personel">پرسنل</a>
+            </li>
+            <li class="nav-item">
+              <a href="#metering" class="nav-link" data-toggle="tab" role="tab" aria-controls="metering">کارکرد</a>
+            </li>
+            <li class="nav-item">
+              <a href="#warranty" class="nav-link" data-toggle="tab" role="tab" aria-controls="warranty">گارانتی</a>
+            </li>
+            <li class="nav-item">
+              <a href="#business" class="nav-link" data-toggle="tab" role="tab" aria-controls="business">شرکت</a>
+            </li>
+            <li class="nav-item">
+              <a href="#purchasing" class="nav-link" data-toggle="tab" role="tab" aria-controls="purchasing">اطلاعات
+                خرید</a>
+            </li>
+            <li class="nav-item">
+              <a href="#file" class="nav-link" data-toggle="tab" role="tab" aria-controls="file">اپلود فایل</a>
+            </li>
+
+            <li class="nav-item">
+              <a href="#log" class="nav-link" data-toggle="tab" role="tab" aria-controls="log">اطلاعات</a>
+            </li>
+          </ul>
+
+
+          <div class="tab-content" style="width: 100%!important;">
+            <div class="tab-pane fade show active" id="general" role="tabpanel">
+              <div class="row">
+                <div class="col-md-12">
+                  <nb-card>
+                    <nb-card-header>
+                      عمومی
+                    </nb-card-header>
+                    <nb-card-body>
+                      <div class="row">
+                        <div class="col col-md-6">
+                          <label class="container">
+                            <div style="margin-right: 20px">این دارایی بخشی از دارایی دیگری است</div>
+                            <input type="radio" name="radio" (change)="onChange($event)">
+                            <span class="checkmark"></span>
+                          </label>
+                        </div>
+                        <div class="col col-md-6 pull-right" *ngIf="showAssetSelect">
+                          <select class="form-control"
+                                  style="width: 100%;padding: 0px" dir="rtl"
+                                  class="js-example-basic-single sub-assetList">
+                            <option *ngFor="let item of assetList" [value]="item.id">{{item.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col col-md-6">
+                          <label class="container">
+                            <div style="margin-right: 20px">این دارایی بخشی از دارایی دیگری نیست</div>
+                            <input type="radio" name="radio" checked (change)="onChange1($event)">
+                            <span class="checkmark"></span>
+                          </label>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="row">
+                            <label class="control-label">استان</label>
+                            <select class="form-control"
+                                    style="width: 100%;padding: 0px" dir="rtl"
+                                    class="js-example-basic-single province">
+                              <option *ngFor="let item of provinceList" [value]="item.id">{{item.name}}</option>
+                            </select>
+                          </div>
+
+                          <div class="row">
+                            <label class="control-label">شهر</label>
+                            <select class="form-control"
+                                    style="width: 100%;padding: 0px" dir="rtl"
+                                    class="js-example-basic-single city">
+                              <option *ngFor="let item of cityList" [value]="item.id">{{item.name}}</option>
+                            </select>
+                          </div>
+
+                          <div class="row">
+                            <label class="control-label"> آدرس </label>
+                            <div class="input-group input-group-sm">
+                              <textarea type="text" placeholder="آدرس" [(ngModel)]="asset.address.description" class="form-control"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-5">
+                          <agm-map [latitude]="asset.address.city.location.lat" [longitude]="asset.address.city.location.lng" (mapClick)="mapClicked($event)"
+                                   [scrollwheel]="false" [zoom]="zoom">
+                            <agm-marker [latitude]="asset.address.lat" [longitude]="asset.address.lng"></agm-marker>
+                          </agm-map>
+                        </div>
+                      </div>
+                    </nb-card-body>
+                  </nb-card>
+                  <nb-card>
+                    <nb-card-header>
+                      اطلاعات عمومی
+                    </nb-card-header>
+                    <nb-card-body>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="row">
+                            <div class="col-md-10" style="text-align: right">
+                              <label class="control-label">بودجه تخصیص یافته</label>
+                              <select class="form-control"
+                                      style="width: 100%;padding: 0px" dir="rtl"
+                                      class="js-example-basic-single account">
+                                <option *ngFor="let item of accountList" [value]="item.id">{{item.name}}</option>
+                              </select>
+                            </div>
+                            <div class="col-md-2" style="margin-top: 5vh">
+                              <span>
+                                <i class="fa fa-plus " style="color: green" (click)="showAccountDialog()"></i>
+                              </span>
+
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="row">
+                            <div class="col-md-10" style="text-align: right">
+                              <label class="control-label">مسئول تعمیرات</label>
+                              <select class="form-control"
+                                      style="width: 100%;padding: 0px" dir="rtl"
+                                      class="js-example-basic-single chargeDepartment">
+                                <option *ngFor="let item of chargeDepartmentList" [value]="item.id">{{item.code}}</option>
+                              </select>
+                            </div>
+                            <div class="col-md-2" style="margin-top: 5vh">
+                              <span>
+                                <i class="fa fa-plus " style="color: green" (click)="showChargeDepartmentDialog()"></i>
+                              </span>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12 text-right">
+                          <label class="control-label"> یادداشت ها </label>
+                          <div class="input-group input-group-sm">
+                            <textarea type="text" placeholder="یادداشت ها" [(ngModel)]="asset.note" class="form-control"></textarea>
+                          </div>
+                        </div>
+                      </div>
+
+
+                    </nb-card-body>
+                  </nb-card>
+
+                </div>
+              </div>
+
+
+            </div>
+            <div class="tab-pane fade" id="BOM" role="tabpanel">
+              <nb-card>
+                <nb-card-body>
+                  <table class="table" style="border-radius: 4px;">
+                    <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                    <tr>
+                      <td>ردیف</td>
+                      <td>نام قطعه</td>
+                      <td>کد قطعه</td>
+                      <td>مقدار موجودی</td>
+                      <td>حداقل موجودی</td>
+                      <td>حذف</td>
+                    </tr>
+                    </thead>
+                    <tbody style="text-align: right">
+                    <tr *ngFor="let item of asset.parts;let i = index">
+                      ‍<td>{{i+1}}</td>
+                      <td>{{item.name}}</td>
+                      <td>{{item.code}}</td>
+                      <td>{{item.quantity}}</td>
+                      <td>{{item.minQuantity}}</td>
+                      <td>
+                        <a class="btnRemove" (click)="deleteMBOM(item.id,i)" style="cursor: pointer;color: red">
+                          <i class="nb-trash"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </nb-card-body>
+
+                <nb-card-footer>
+                  <i class="fa fa-plus-circle fa-3x" (click)="showBOMAddForm()">
+                  </i>
+                </nb-card-footer>
+              </nb-card>
+            </div>
+            <div class="tab-pane fade" id="property" role="tabpanel">
+              <nb-card>
+                <nb-card-body>
+                  <div class="row" style="margin-top: 5vh">
+                    <div class="col-md-1  text-center"></div>
+                    <div class="col-md-4  text-center">
+                      <div class="row">
+                        <label class="control-label">انتخاب ویژگی های کالا</label>
+                        <select dir="rtl" multiple="multiple" class="form-control js-example-basic-single property"
+                                name="postList" style="width: 100%;margin: 10px">
+                          <option *ngFor="let item of propertyList"
+                                  [value]="item.id">
+                            {{item.key}}
+                          </option>
+                        </select>
+                      </div>
+                      <div class="row text-center" style="margin-top: 5vh">
+                        <div class="col col-md-12">
+                        <button class="btn btn-hero-success" style="cursor: pointer" (click)="showAddPropertyForm()">ثبت ویژگی جدید</button>
+                      </div>
+                      </div>
+                    </div>
+                    <div class="col col-md-4">
+                      <div class="row text-right" *ngFor="let x of asset.properties;let i=index">
+                        <div class="col col-md-10" *ngIf="x.type=='keyValue'">
+                          <label class="control-label">{{x.key}}</label>
+                          <div class="input-group input-group-sm">
+                            <input class="form-control" [(ngModel)]="x.value">
+                          </div>
+                        </div>
+                        <div class="col col-md-10" *ngIf="x.type=='selectOne'">
+                          <label class="control-label">{{x.key}}</label>
+                          <select class="form-control" (change)="selectOne($event,x)"
+                                  style="width: 100%;padding: 0px" dir="rtl">
+                            <option *ngFor="let item of x.repository" [value]="item">{{item}}</option>
+                          </select>
+                        </div>
+                        <div class="col col-md-10" *ngIf="x.type=='selectMulti'">
+                          <label class="control-label">{{x.key}}</label>
+                          <select dir="rtl" multiple="multiple" class="form-control js-example-basic-single {{x.key}}"
+                                  name="postList" style="width: 100%;margin: 10px">
+                            <option *ngFor="let item of x.repository"
+                                    [value]="item">
+                              {{item}}
+                            </option>
+                          </select>
+                        </div>
+                        <div class="col col-md-2">
+                          <i class="fa fa-remove" style="color:red" (click)="deleteProperty(i)"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </nb-card-body>
+              </nb-card>
+
+            </div>
+            <div class="tab-pane fade" id="personel" role="tabpanel">
+              <app-user-list></app-user-list>
+            </div>
+            <div class="tab-pane fade" id="metering" role="tabpanel">
+              <nb-card>
+                <nb-card-body>
+                  <table class="table" style="border-radius: 4px;">
+                    <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                    <tr>
+                      <td>ردیف</td>
+                      <td>کارکرد</td>
+                      <td>واحد</td>
+                      <td>حذف</td>
+                    </tr>
+                    </thead>
+                    <tbody style="text-align: right">
+                    <tr *ngFor="let item of asset.meterings;let i = index">
+                      ‍<td>{{i+1}}</td>
+                      <td>{{item.amount}}</td>
+                      <td>{{item.unit.name}}</td>
+                      <td>
+                        <a class=" btnRemove" (click)="deleteMetering(item.id,i)" style="cursor: pointer;color: red">
+                          <i class="nb-trash"></i>
+                        </a>
+                      </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </nb-card-body>
+
+                <nb-card-footer>
+                  <i class="fa fa-plus-circle fa-3x" (click)="showMeteringAddForm()">
+                  </i>
+                </nb-card-footer>
+              </nb-card>
+
+            </div>
+            <div class="tab-pane fade" id="warranty" role="tabpanel">
+              <nb-card>
+                <nb-card-body>
+                  <table class="table" style="border-radius: 4px;">
+                    <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                    <tr>
+                      <td>ردیف</td>
+                      <td>نام شرکت</td>
+                      <td>نوع گارانتی</td>
+                      <td>زمان پایان</td>
+                      <td>حذف</td>
+                    </tr>
+                    </thead>
+                    <tbody style="text-align: right">
+                    <tr *ngFor="let item of asset.warranties;let i = index">
+                      ‍<td>{{i+1}}</td>
+                      <td>{{item.companyName}}</td>
+                      <td>{{item.timeType}}</td>
+                      <td>{{item.expiry}}</td>
+                      <td>
+                        <a class="btnRemove" (click)="deleteWarranty(item.id,i)" style="cursor: pointer;color: red">
+                          <i class="nb-trash"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </nb-card-body>
+
+                <nb-card-footer>
+                  <i class="fa fa-plus-circle fa-3x" (click)="showWarrantyAddForm()">
+                  </i>
+                </nb-card-footer>
+              </nb-card>
+
+
+            </div>
+            <div class="tab-pane fade" id="business" role="tabpanel">
+              <nb-card>
+                <nb-card-body>
+                  <table class="table" style="border-radius: 4px;">
+                    <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                    <tr>
+                      <td>ردیف</td>
+                      <td>شرکت</td>
+                      <td>نوع شرکت</td>
+                      <td>پیشنهاد شده؟</td>
+                      <td>حذف</td>
+                    </tr>
+                    </thead>
+                    <tbody style="text-align: right">
+                    <tr *ngFor="let item of asset.businesses;let i = index">
+                      ‍<td>{{i+1}}</td>
+                      <td>{{item.company.name}}</td>
+                      <td>{{item.type}}</td>
+                      <td>{{item.suggest}}</td>
+                      <td>
+                        <a class="btnRemove" (click)="deleteBusiness(item.id,i)" style="cursor: pointer;color: red">
+                          <i class="nb-trash"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </nb-card-body>
+                <nb-card-footer>
+                  <i class="fa fa-plus-circle fa-3x" (click)="showBusinessListForm()">
+                  </i>
+                </nb-card-footer>
+              </nb-card>
+
+            </div>
+            <div class="tab-pane fade" id="purchasing" role="tabpanel">
+              <nb-card>
+                <nb-card-body>
+                  <table class="table" style="border-radius: 4px;">
+                    <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                    <tr>
+                      <td>ردیف</td>
+                      <td>شرکت</td>
+                      <td>تاریخ تحویل</td>
+                      <td>تاریخ خرید</td>
+                      <td>قیمت خریداری</td>
+                      <td>حذف</td>
+                    </tr>
+                    </thead>
+                    <tbody style="text-align: right">
+                    <tr *ngFor="let item of asset.purchase;let i = index">
+                      ‍<td>{{i+1}}</td>
+                      <td>{{item.business.company.name}}</td>
+                      <td>{{item.deliverDate}}</td>
+                      <td>{{item.purchaseDate}}</td>
+                      <td>{{item.price}}</td>
+                      <td>
+                        <a class="btnRemove" (click)="deletePurchase(item.id,i)" style="cursor: pointer;color: red">
+                          <i class="nb-trash"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </nb-card-body>
+                <nb-card-footer>
+                  <i class="fa fa-plus-circle fa-3x" (click)="showPurchaseAddForm()">
+                  </i>
+                </nb-card-footer>
+              </nb-card>
+                <!--<button (click)="showPurchaseAddForm()">افزودن خرید</button>-->
+            </div>
+            <div class="tab-pane fade" id="file" role="tabpanel">
+              <nb-card>
+                <nb-card-body>
+                  <table class="table" style="border-radius: 4px;">
+                    <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                    <tr>
+                      <td>ردیف</td>
+                      <td>نام فایل</td>
+                      <td>نوع فایل</td>
+                      <td>حذف</td>
+                    </tr>
+                    </thead>
+                    <tbody style="text-align: right">
+                    <tr *ngFor="let item of asset.documents;let i = index">
+                      ‍<td>{{i+1}}</td>
+                      <td>{{item.name}}</td>
+                      <td>{{item.contentType}}</td>
+                      <td>
+                        <a class="btnRemove" (click)="del(item.id,i)" style="cursor: pointer;color: red">
+                          <i class="nb-trash"></i>
+                        </a>
+                      </td>
+                    </tr>
+
+                    </tbody>
+
+                  </table>
+                </nb-card-body>
+                <!--</div>-->
+
+                <nb-card-footer>
+                  <div style="width: 100%;
+    text-align: left;
+    margin-top: 20px;" class="text-center">
+
+                    <div class=" text-right myShadow" id="attachment">
+
+                      <div class="text-center">
+                        <label *ngIf="appdisabled===1" class=" " style="width: 180px;
+    height: 30px; margin: 5px 5px 10px 10px; text-align: center">
+                          <a class="btn btn-round btn-hero-success" style="color: white;
+    font-size: 14px;"> انتخاب فایلها
+                            <i class="fa fa-paperclip " aria-hidden="true" style="font-size: larger"></i>
+                          </a>
+                          <input type="file" style="display: none;" multiple [disabled]="appdisabled===0"
+                                 (change)="onChangeUploader(input,$event)"
+                                 #input>
+                        </label>
+                      </div>
+                      <div class="text-center" *ngIf="appdisabled===0">
+                        <label style="cursor: not-allowed; width: 180px;
+    height: 50px;">
+                          <a style="   color: white;
+    font-size: 11px;" class="btn btn-round btn-hero-success">
+                            <i class="fa fa-spinner fa-spin fa-3x"></i>در حال آپلود
+                          </a>
+                          <input type="file" style="display: none;" multiple [disabled]="appdisabled===0"
+                                 (change)="onChangeUploader(input,$event)"
+                                 #input>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </nb-card-footer>
+              </nb-card>
+
+
+            </div>
+            <div class="tab-pane fade" id="log" role="tabpanel">
+              <nb-card>
+                <nb-card-body>
+                  <table class="table" style="border-radius: 4px;">
+                    <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                    <tr>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>3</td>
+                      <td>4</td>
+                      <td>5</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+
+                    </tbody>
+
+                  </table>
+                </nb-card-body>
+                <!--</div>-->
+
+                <!--<nb-card-footer>-->
+                <!--<i class="fa fa-plus-circle fa-3x">-->
+                <!--</i>-->
+                <!--</nb-card-footer>-->
+              </nb-card>
+
+            </div>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+  </nb-card-body>
+</nb-card>
+<app-dialog [(visible)]="showAccountModal" [title]="'بخش افزودن بودجه خرید'" style="direction: rtl">
+  <div class="row" style="text-align: right">
+    <div class="col-md-6">
+      <label class="control-label">عنوان بودجه</label>
+      <div class="input-group input-group-sm">
+        <input type="text" placeholder="عنوان بودجه" [(ngModel)]="account.name" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label class="control-label"> توضیحات </label>
+      <div class="input-group input-group-sm">
+                              <textarea type="text" [(ngModel)]="account.description"
+                                        placeholder="در این بخش توضیحات در مورد بودجه تخصیص یافته را مطرح میکنید"
+                                        class="form-control"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="row text-center" style="margin-top: 5vh">
+    <div class="col col-md-12">
+    <button class="btn btn-hero-success" (click)="createAccount()">ثبت بودجه</button>
+  </div>
+  </div>
+</app-dialog>
+
+
+<app-dialog [(visible)]="showChargeDepartmentModal" [title]="'بخش افزودن مسئول تعمیرات و نگهداری'"
+            style="direction: rtl">
+  <div class="row" style="text-align: right">
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <label class="control-label">کد بخش</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="کد بخش" [(ngModel)]="chargeDepartment.code" class="form-control">
+          </div>
+        </div>
+        <div class="col-md-12">
+          <label class="control-label"> توضیحات </label>
+          <div class="input-group input-group-sm">
+                              <textarea type="text" [(ngModel)]="chargeDepartment.description"
+                                        placeholder="در این بخش توضیحات در مورد بخش مسئول تعمیرات و نگهداری را مطرح میکنید"
+                                        class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row" style="margin-top: 0vh!important;">
+            <div class="col-md-10" style="text-align: right">
+              <label class="control-label">مسئول تعمیرات</label>
+              <select class="form-control"
+                      style="width: 100%;padding: 0px" dir="rtl"
+                      class="js-example-basic-single chargeDepartmentLocation">
+                <option *ngFor="let item of assetListChargeDepartment" [value]="item.id">{{item.name}}</option>
+              </select>
+            </div>
+            <div class="col-md-2" style="margin-top: 5vh">
+               <span>
+                 <i class="fa fa-plus " style="color: green"></i>
+               </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-3">
+
+    </div>
+  </div>
+  <div class="row text-center" style="margin-top: 5vh">
+    <div class="col col-md-12">
+    <button class="btn btn-hero-success" (click)="createChargeDepartment()">ثبت مسئول تعمیرات</button>
+  </div>
+  </div>
+</app-dialog>
+
+
+<!--<app-dialog [(visible)]="addLocation" [name]="'بخش افزودن مسئول تعمیرات و نگهداری'" style="direction: rtl">-->
+  <!--<add-item *ngIf="addLocation"></add-item>-->
+<!--</app-dialog>-->
+
+
+<app-dialog [(visible)]="BOMAddForm" [title]="'بخش افزودن زیرقطعه'" style="direction: rtl">
+  <bom-add-form *ngIf="BOMAddForm" [Show]="true" [target]="'asset'"></bom-add-form>
+</app-dialog>
+
+
+<app-dialog [(visible)]="meteringAdd" [title]="'بخش افزودن کارکرد'" style="direction: rtl">
+  <metering-add-form *ngIf="meteringAdd" [target]="'asset'"></metering-add-form>
+</app-dialog>
+
+
+<app-dialog [(visible)]="businessListModal" [title]="'بخش افزودن شرکت'" style="direction: rtl">
+  <div class="row" style="text-align: right">
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row" style="margin-top: 0vh!important;">
+            <div class="col-md-10" style="text-align: right">
+              <label class="control-label">شرکت خریداری شده</label>
+              <select class="form-control"
+                      style="width: 100%;padding: 0px" dir="rtl"
+                      class="js-example-basic-single companySelect">
+                <option *ngFor="let item of companyList" [value]="item.id">{{item.name}}</option>
+              </select>
+            </div>
+            <div class="col-md-2" style="margin-top: 5vh">
+               <span>
+                 <i class="fa fa-plus" style="color: green" (click)="showBusinessAddForm()"></i>
+               </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <label class="control-label">نوع شرکت</label>
+          <select class="form-control" [(ngModel)]="business.type"
+                  style="width: 100%;padding: 0px" dir="rtl">
+            <option *ngFor="let item of businessTypeList" [value]="item._value">{{item._title}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-md-12">
+        <div class="demo-checkboxes" style="text-align: right!important;border: 1px solid rgb(228, 228, 228)" >
+          <input style="cursor: pointer" id="1" type="checkbox" (change)="changeSuggest($event)">
+          <label style="cursor: pointer" for="1">
+            این شرکت را پیشنهاد می دهم
+          </label>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+
+    </div>
+  </div>
+  <div class="row text-center" style="margin-top: 5vh">
+    <div class="col col-md-12">
+    <button class="btn btn-hero-success" (click)="createBusiness()">ثبت شرکت</button>
+  </div>
+  </div>
+</app-dialog>
+
+
+<app-dialog [(visible)]="businessAddModal" [title]="'بخش افزودن شرکت'" style="direction: rtl">
+  <business-add-form *ngIf="businessAddModal"></business-add-form>
+</app-dialog>
+
+
+<app-dialog [(visible)]="purchaseAddModal" [title]="'بخش افزودن خرید'" style="direction: rtl">
+  <purchase-add-form *ngIf="purchaseAddModal"></purchase-add-form>
+</app-dialog>
+<app-dialog [(visible)]="warrantyAddModal" [title]="'بخش افزودن گارانتی'" style="direction: rtl">
+  <warranty-add-form *ngIf="warrantyAddModal" [target]="'asset'"></warranty-add-form>
+</app-dialog>
+
+<app-dialog [(visible)]="propertyAddModal" [title]="'بخش افزودن ویژگی'" style="direction: rtl">
+  <nb-card>
+    <nb-card-body>
+      <div class="row">
+        <div class="col col-md-4">
+          <label class="control-label">نوع ویژگی</label>
+          <select class="form-control" [(ngModel)]="prop.type"
+                  style="width: 100%;padding: 0px" dir="rtl">
+            <option *ngFor="let item of propertyTypeList" [value]="item._value">{{item._title}}</option>
+          </select>
+        </div>
+        <div class="col col-md-6">
+          <nb-card *ngIf="prop.type=='keyValue'">
+            <nb-card-body>
+              <div class="row">
+                <label class="control-label">کلید</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="کلید ویژگی"  [(ngModel)]="prop.key" class="form-control">
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+          <nb-card *ngIf="prop.type=='selectOne' || prop.type=='selectMulti'">
+            <nb-card-body>
+              <div class="row">
+                <label class="control-label">کلید</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="کلید ویژگی" [(ngModel)]="prop.key" class="form-control">
+                </div>
+              </div>
+              <div class="row" *ngFor="let item of prop.repository;let i=index">
+                <div class="col col-md-8">
+                  <label class="control-label">ویژگی {{i}}</label>
+                  <div class="input-group input-group-sm">
+                    <input type="text" placeholder=" ویژگی"  (change)="pushToRefrence(i,$event.target.value)" [value]="item"  class="form-control">
+                  </div>
+                </div>
+                <div class="col col-md-2">
+                  <br>
+                  <i class="fa fa-plus-circle" style="color:green" (click)="addRepo()"></i>
+                </div>
+                <div class="col col-md-2">
+                  <br>
+                  <i class="fa fa-remove" style="color:red" (click)="deleteRepo(i)"></i>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+
+        </div>
+        <div class="col col-md-2">
+          <div class="row" >
+            <button class="btn btn-hero-success" (click)="createProperty()">ثبت ویژگی</button>
+          </div>
+        </div>
+      </div>
+
+    </nb-card-body>
+  </nb-card>
+</app-dialog>

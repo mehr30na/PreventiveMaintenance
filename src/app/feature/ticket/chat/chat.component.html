@@ -1,0 +1,54 @@
+<nb-card>
+  <nb-card-header>
+    <div class="row">
+      <div class="col-md-4">
+      </div>
+      <div class="col-md-4" style="text-align: center;">گفتگو</div>
+
+    </div>
+  </nb-card-header>
+  <nb-card-body style="direction: rtl!important;height: 600px">
+
+    <div class="chat_window">
+      <div class="top_menu">
+        <div class="buttons">
+          <div class="button close"></div>
+          <div class="button minimize"></div>
+          <div class="button maximize"></div>
+        </div>
+        <div class="title">پیام ها</div>
+      </div>
+      <ul class="messages"></ul>
+      <div class="bottom_wrapper clearfix">
+        <div class="message_input_wrapper"><input [(ngModel)]="message.text" class="message_input"
+                                                  placeholder="پیام خود را اینجا بنویسید"/></div>
+        <div class="send_message">
+          <div class="icon"></div>
+          <div class="text" (click)="sendMessage()">ارسال</div>
+        </div>
+      </div>
+    </div>
+    <div class="message_template">
+      <li class="message">
+        <div class="avatar"></div>
+        <div class="text_wrapper">
+          <div class="text"></div>
+          <div class="timestamp">
+            <div class="tik1"></div>
+            <div class="tik2"></div>
+            <div class="date"></div>
+          </div>
+
+        </div>
+      </li>
+    </div>
+
+  </nb-card-body>
+  <nb-card-footer>
+
+
+  </nb-card-footer>
+</nb-card>
+
+
+

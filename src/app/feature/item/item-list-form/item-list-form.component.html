@@ -1,0 +1,74 @@
+<nb-card>
+  <nb-card-header class="text-center">
+    <h3>لیست دارایی ها
+      <i (click)="CategorySelect()" class="fa fa-plus-circle float-left" style="font-size:3vw;color:green"></i>
+    </h3>
+  </nb-card-header>
+
+  <nb-card-body>
+
+    <div class="ui-rtl" dir="rtl">
+      <p-treeTable [value]="files" selectionMode="single" (onNodeSelect)="nodeSelect($event)" class="ui-rtl" dir="rtl">
+          <p-header>لیست دارایی ها</p-header>
+          <p-footer>یک مورد از لیست انتخاب کنید</p-footer>
+        <p-column field="code" header="کد"></p-column>
+        <p-column field="title" header="عنوان"></p-column>
+        <p-column field="accountTitle" header="بودجه"></p-column>
+        <p-column field="chTitle" header="بخش تعمیرات"></p-column>
+  
+      </p-treeTable>
+
+    </div>
+
+
+  </nb-card-body>
+
+  <app-dialog [(visible)]="categoryShow" [title]="'انتخاب نوع دارایی'" style="direction: rtl">
+    <!-- <bom-add-form *ngIf="categoryShow"></bom-add-form> -->
+
+    <div class="row">
+      <div class="col text-center">
+        <nb-card (click)="goToAddItem(1)">
+          <nb-card-body class="text-center">
+            <img src="./assets/images/location.jpg" style="width:100%;height:25vh">
+            <h3>مکان</h3>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col text-center">
+        <nb-card (click)="goToAddItem(2)">
+          <nb-card-body class="text-center">
+            <img src="./assets/images/mashin.jpg" style="width:100%;height:25vh">
+            <h3>ماشین آلات</h3>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col text-center">
+        <nb-card (click)="goToAddItem(3)">
+          <nb-card-body class="text-center">
+            <img src="./assets/images/tools.jpg" style="width:100%;height:25vh">
+            <h3>ابزار</h3>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+
+  </app-dialog>
+
+  <app-dialog [(visible)]="operationShow" [title]="'یکی از عملیات را انتخاب کنید'" style="direction: rtl">
+      <div class="col text-center">
+          <nb-card  style="width:50%;float: left;">
+            <nb-card-body class="text-center">
+              <button class="btn btn-danger btn-sm" (click) = "deleteItem()">حذف</button>
+            </nb-card-body>
+          </nb-card>
+        </div>
+        <div class="col text-center">
+          <nb-card  style="width:50%;float: left;">
+            <nb-card-body class="text-center">
+                <button class="btn btn-warning btn-sm" (click) = "goToEditItem()">ویرایش</button>
+            </nb-card-body>
+          </nb-card>
+        </div>
+  </app-dialog>
+</nb-card>

@@ -1,0 +1,149 @@
+<!-- <nb-card *ngIf="mode==''"> -->
+  <!-- <nb-card-header>
+    <div class="row">
+      <div class="col-md-4">
+        <button class="btn btn-hero-success" style="margin: 4px; " (click)="add()">اختصاص کارشناس</button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">لیست درخواست ها</div>
+      <div class="col-md-4">
+      </div>
+    </div>
+  </nb-card-header> -->
+  <!-- <nb-card-body style="direction: rtl!important;"> -->
+    <!-- <div class="row">
+      <div class="col col-md-4"></div>
+      <div class="col col-md-4">
+        <select style="width: 100%;padding: 0px" dir="rtl" class="form-control js-example-basic-single itemSelect">
+          <option value="main" disabled="disabled">لطفا کالای مورد نظر را انتخاب کنید
+          </option>
+          <option *ngFor="let item of itemList" [value]="item.id">{{item.name}}</option>
+        </select>
+      </div>
+      <div class="col col-md-4"></div>
+    </div> -->
+
+    <!-- <div class="row" *ngFor="let item of ticketList;let i=index" style="width: 100%!important;">
+      <div class="col-md-12">
+        <nb-card class="haver">
+          <nb-card-body>
+            <div class="row"> -->
+              <!--<div class="col-md-12">-->
+              <!-- <div class="col-md-1" style="cursor: pointer"> -->
+                <!-- <img src="{{myConfig.getUrl()+item.item.image.imageData}}" style="width: 60px; height: 60px; border-radius: 50%">
+              </div>
+              <div class="col-md-3 text-center" style="cursor: pointer">
+                <label>{{item.item.name}}</label>
+                <br>
+                <label style="font-size: 10px">{{item.name}}</label>
+              </div>
+              <div class="col-md-4 text-center" style="cursor: pointer">
+                {{item.description}}
+              </div>
+              <div class="col-md-2 text-center" style="cursor: pointer">
+                {{item.item.priority}}
+              </div>
+              <div class="col-md-1" style="margin-top:20px!important;">
+                <a (click)="editTicket(item.id)" style="cursor: pointer;color: green;">
+                  <i class="nb-edit" style="font-size: 24px"></i>
+                </a>
+              </div> -->
+              <!-- <div class="col-md-1" style="margin-top: 20px!important;">
+                <a class="btnRemove" (click)="deleteTicket(item.id,i)" style="cursor: pointer;color: red">
+                  <i class="nb-trash" style="font-size: 24px"></i>
+                </a>
+              </div> -->
+              <!--</div>-->
+            <!-- </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div> -->
+  <!-- </nb-card-body> -->
+  <!-- <nb-card-footer> -->
+
+  <!-- </nb-card-footer> -->
+<!-- </nb-card> -->
+<nb-card >
+  <nb-card-header>
+    <div class="row">
+
+      <div class="col-md-4">
+        <button class="btn btn-hero-danger" style="margin: 4px;" (click)="cancel()">
+          برگشت
+        </button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">افزودن خرابی و درخواست</div>
+      <div class="col-md-4 pull-left">
+
+      </div>
+    </div>
+
+    <!-- <div class="row" *ngIf="mode=='edit'">
+      <div class="col-md-4">
+        <button class="btn btn-hero-danger" style="margin: 4px;" (click)="cancel()">
+          انصراف
+        </button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">ویرایش خرابی و درخواست</div>
+      <div class="col-md-4 pull-left">
+
+      </div>
+    </div> -->
+  </nb-card-header>
+  <nb-card-body>
+    <div>
+      <form [formGroup]="addForm">
+        <div class="row">
+          <div class="col-md-4 text-center">
+            <label class="control-label">انتخاب کالا</label>
+            <select class="form-control" [(ngModel)]="ticket.item.id" name="itemAdd" formControlName="itemAdd" style="width: 100%;padding: 0px"
+              dir="rtl" class="js-example-basic-single itemAdd">
+
+              <option value="main" disabled="disabled">لطفا کالا مورد نظر را انتخاب کنید
+              </option>
+              <option *ngFor="let item of itemList" [value]="item.id">{{item.name}}</option>
+            </select>
+            <p style="color: red" *ngIf="!addForm.controls['itemAdd'].valid && (addForm.controls['itemAdd'].touched ||saveButton)">
+              انتخاب کردن کالا الزامی است
+            </p>
+          </div>
+
+          <div class="col-md-4 text-center">
+            <label class="control-label">انتخاب درخواست</label>
+            <select class="form-control" [(ngModel)]="ticket.id" name="ticketAdd" formControlName="ticketAdd" style="width: 100%;padding: 0px"
+              dir="rtl" class="js-example-basic-single ticketAdd">
+
+              <option value="main" disabled="disabled">لطفا درخواست مورد نظر را انتخاب کنید
+              </option>
+              <option *ngFor="let ticket of ticketList" [value]="ticket.id">{{ticket.title}}</option>
+            </select>
+            <p style="color: red" *ngIf="!addForm.controls['ticketAdd'].valid && (addForm.controls['ticketAdd'].touched ||saveButton)">
+              انتخاب کردن درخواست الزامی است
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <label class="control-label">انتخاب کارشناس</label>
+            <select id="511" dir="rtl" multiple="multiple" class="form-control expertAdd"
+                    name="postList" style="width: 100%;margin: 10px;height:8vh!important;padding: 0px" name="expertAdd" formControlName="expertAdd">
+              <option *ngFor="let item of expertList"
+                      [value]="item.id">
+                {{item.name}}
+              </option>
+            </select>
+            <p style="color: red" *ngIf="!addForm.controls['expertAdd'].valid && (addForm.controls['expertAdd'].touched ||saveButton)">
+              انتخاب کردن کارشناس الزامی است
+            </p>
+          </div>
+        </div>
+      </form>
+    </div>
+
+
+  </nb-card-body>
+  <nb-card-footer>
+    <div style="text-align: center!important;" >
+      <button type="submit" class="btn btn-primary" (click)="allocateExpert()">ثبت</button>
+    </div>
+
+  </nb-card-footer>
+</nb-card>

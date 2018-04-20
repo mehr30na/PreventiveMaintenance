@@ -1,0 +1,50 @@
+<nb-card>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-4 text-right">
+        <label class="control-label "> شرکت گارانتی کننده</label>
+        <div class="input-group input-group-sm">
+          <input type="text" placeholder="شرکت گارانتی کننده" [(ngModel)]="warranty.companyName" class="form-control">
+        </div>
+      </div>
+      <div class="col-md-4 text-right">
+        <label class="control-label ">زمان پایان گارانتی</label>
+        <!--<div class="input-group input-group-sm">-->
+          <!--<input type="text" placeholder="زمان پایان گارانتی" [(ngModel)]="warranty.expiry"  class="form-control">-->
+        <!--</div>-->
+        <dp-date-picker
+          dir="rtl"
+          [(ngModel)]="dateObject"
+          mode="day"
+          placeholder="تاریخ"
+          theme="dp-material">
+        </dp-date-picker>
+      </div>
+
+      <div class="col-md-2"></div>
+    </div>
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-4 text-right">
+        <label class="control-label ">نوع زمان گارانتی</label>
+        <div class="input-group input-group-sm">
+          <input type="text" placeholder="نوع زمان گارانتی" [(ngModel)]="warranty.timeType" class="form-control">
+        </div>
+      </div>
+      <div class="col-md-4 text-right">
+        <label class="control-label"> توضیحات </label>
+        <div class="input-group input-group-sm">
+          <textarea type="text" placeholder="توضیحاتی در مورد گارانتی" [(ngModel)]="warranty.description" class="form-control"></textarea>
+        </div>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+    <div class="row text-center" style="margin-top: 5vh">
+      <div class="col col-md-12">
+      <button class="btn btn-hero-success" (click)="createWarranty()">ثبت گارانتی</button>
+    </div>
+    </div>
+
+  </nb-card-body>
+</nb-card>

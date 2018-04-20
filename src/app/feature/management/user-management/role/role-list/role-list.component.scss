@@ -1,0 +1,35 @@
+div, button, table, tr, td {
+  direction: rtl !important;
+}
+
+nb-card {
+  transform: translate3d(0, 0, 0);
+}
+
+i {
+  font-size: 24px !important;
+}
+
+.table-bordered {
+  border: 1px solid #bfbab9;
+  border-collapse: separate;
+  border-left: 0;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 6px;
+}
+
+.table-bordered {
+  border: 1px solid #bfbab9 !important;
+}
+
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+  border: 1px solid #bfbab9 !important;
+}
+
+

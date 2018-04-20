@@ -1,0 +1,1358 @@
+<nb-card>
+  <nb-card-header>
+    <i (click)="addWorkOrder()" class="fa fa-plus-circle float-left" style="font-size:3vw;color:green"></i>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row" style="width: 100%!important;">
+        <div class="col col-md-2 text-center" style="margin-top: 5vh">
+          <!--<img src="../../../../assets/images/location.jpg" alt="noImage" height="120" width="100%">-->
+          <nb-card>
+            <nb-card-body>
+              <img *ngIf="!work.image.imageData" src="../../../../assets/images/location.jpg"
+                   height="120" width="100%" alt="noImage">
+              <img *ngIf="work.image.imageData" src="{{work.image.imageData}}" width="100%" height="120">
+            </nb-card-body>
+            <nb-card-footer style="text-align: center;height: 10vh;background-color: #1b567c">
+              <label>
+                <a style="color: white;cursor: pointer"><b>انتخاب تصویر </b>
+                </a>
+                <input id="custom-input" type="file" style="display: none;"
+                       (change)="fileChangeListener($event)">
+              </label>
+            </nb-card-footer>
+          </nb-card>
+          <br>
+        </div>
+        <div class="col col-md-5 text-center">
+            <div class="row">
+              <div class="col-md-10" style="text-align: right">
+                <label class="control-label">استتوس</label>
+                <select class="form-control"
+                        style="width: 100%;padding: 0px" dir="rtl"
+                        class="js-example-basic-single workOrderStatus">
+                  <option *ngFor="let item of workOrderStatusList" [value]="item.id">{{item.name}}-{{item.status}}</option>
+                </select>
+              </div>
+              <div class="col-md-2" style="margin-top: 5vh">
+                 <span>
+                   <i class="fa fa-plus " style="color: green" (click)="showWOStatusAddModal()"></i>
+                 </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12" style="text-align: right">
+                <label class="control-label">maintenance Type</label>
+                <select class="form-control"
+                        style="width: 100%;padding: 0px" dir="rtl"
+                        class="js-example-basic-single maintenanceType">
+                  <option *ngFor="let item of maintenanceTypeList" [value]="item._value">{{item._title}}</option>
+                </select>
+              </div>
+              <!--<div class="col-md-2" style="margin-top: 5vh">-->
+              <!--<span>-->
+              <!--<i class="fa fa-plus " style="color: green" (click)="showMaintenanceTypeDialog()"></i>-->
+              <!--</span>-->
+
+              <!--</div>-->
+            </div>
+            <div class="row">
+              <div class="col-md-12" style="text-align: right">
+                <label class="control-label">اولویت</label>
+                <select class="form-control"
+                        style="width: 100%;padding: 0px" dir="rtl"
+                        class="js-example-basic-single workOrderPriority">
+                  <option *ngFor="let item of priorityList" [value]="item.id"></option>
+                </select>
+              </div>
+              <!--<div class="col-md-2" style="margin-top: 5vh">-->
+              <!--<span>-->
+              <!--<i class="fa fa-plus " style="color: green" (click)="showAccountDialog()"></i>-->
+              <!--</span>-->
+
+              <!--</div>-->
+            </div>
+          </div>
+          <div class="col col-md-5 text-center">
+            <div class="row">
+              <div class="col-md-10" style="text-align: right">
+                <label class="control-label">دارایی</label>
+                <select class="form-control"
+                        style="width: 100%;padding: 0px" dir="rtl"
+                        class="js-example-basic-single workOrderAsset">
+                  <option *ngFor="let item of assetList" [value]="item.id">{{item.name}}</option>
+                </select>
+              </div>
+              <div class="col-md-2" style="margin-top: 5vh">
+                <span>
+                  <i class="fa fa-plus " style="color: green" (click)="showAssetAddDialog()"></i>
+                </span>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-10" style="text-align: right">
+                <label class="control-label">پروژه</label>
+                <select class="form-control"
+                        style="width: 100%;padding: 0px" dir="rtl"
+                        class="js-example-basic-single workOrderProject">
+                  <option *ngFor="let item of projectList" [value]="item.id"></option>
+                </select>
+              </div>
+              <div class="col-md-2" style="margin-top: 5vh">
+                              <span>
+                                <i class="fa fa-plus " style="color: green" (click)="showProjectDialog()"></i>
+                              </span>
+
+              </div>
+            </div>
+            <!--<div class="row">-->
+            <!--<label class="control-label">زمان پایان کار</label>-->
+            <!--<dp-date-picker-->
+            <!--dir="rtl"-->
+            <!--[(ngModel)]="work.completionDate"-->
+            <!--mode="day"-->
+            <!--placeholder="تاریخ"-->
+            <!--theme="dp-material">-->
+            <!--</dp-date-picker>-->
+            <!--</div>-->
+          </div>
+      </div>
+      <div class="d-flex flex-row mt-2">
+        <ul class="nav nav-tabs nav-tabs--vertical nav-tabs--left" role="navigation" style="text-align: right">
+          <li class="nav-item">
+            <a href="#generalWork" class="nav-link active" data-toggle="tab" role="tab" aria-controls="generalWork">عمومی</a>
+          </li>
+          <li class="nav-item">
+            <a href="#completionWork" class="nav-link" data-toggle="tab" role="tab" aria-controls="completionWork">کامل</a>
+          </li>
+          <li class="nav-item">
+            <a href="#laborTaskWork" class="nav-link" data-toggle="tab" role="tab" aria-controls="laborTaskWork">نمیدونم</a>
+          </li>
+          <li class="nav-item">
+            <a href="#partsWork" class="nav-link" data-toggle="tab" role="tab" aria-controls="partsWork">قطعات</a>
+          </li>
+          <li class="nav-item">
+            <a href="#meterReadingWork" class="nav-link" data-toggle="tab" role="tab" aria-controls="meterReadingWork">خواندن
+              کارکرد</a>
+          </li>
+          <li class="nav-item">
+            <a href="#scheduleMaintenance" class="nav-link" data-toggle="tab" role="tab" aria-controls="scheduleMaintenance">دوره بازدید
+              </a>
+          </li>
+          <li class="nav-item">
+            <a href="#miscCostPage" class="nav-link" data-toggle="tab" role="tab" aria-controls="miscCostPage">هزینه پیش بینی نشده</a>
+          </li>
+          <li class="nav-item">
+            <a href="#notificationWork" class="nav-link" data-toggle="tab" role="tab" aria-controls="notificationWork">هشدار ها
+              </a>
+          </li>
+          <li class="nav-item">
+            <a href="#filesWork" class="nav-link" data-toggle="tab" role="tab" aria-controls="filesWork">اپلود
+              فایل</a>
+          </li>
+          <li class="nav-item">
+            <a href="#WorkLog" class="nav-link" data-toggle="tab" role="tab" aria-controls="WorkLog">اطلاعات</a>
+          </li>
+        </ul>
+
+
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="generalWork" role="tabpanel">
+            <div class="row">
+              <div class="col col-md-1"></div>
+              <div class="col col-md-10 text-right">
+                <label class="control-label"> خلاصه کار </label>
+                <div class="input-group input-group-sm">
+                  <textarea type="text" placeholder="خلاصه" [(ngModel)]="work.issueSummary" class="form-control"></textarea>
+                </div>
+              </div>
+              <div class="col col-md-1"></div>
+            </div>
+            <div class="row">
+              <div class="col col-md-1"></div>
+              <div class="col col-md-5">
+                <div class="row">
+                  <label class="control-label"> دستور کار </label>
+                  <div class="input-group input-group-sm">
+                    <textarea type="text" placeholder="دستور کار" [(ngModel)]="work.workInstruction" style="height: 50vh" class="form-control"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="col col-md-1"></div>
+              <div class="col col-md-5">
+                <div class="row">
+                  <div class="col-md-10" style="text-align: right">
+                    <label class="control-label">اختصاص کار</label>
+                    <select class="form-control"
+                            style="width: 100%;padding: 0px" dir="rtl"
+                            class="js-example-basic-single assignToUser">
+                      <option *ngFor="let item of userList" [value]="item.id">{{item.name}}-{{item.family}}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2" style="margin-top: 5vh">
+                              <span>
+                                <i class="fa fa-plus " style="color: green" (click)="showAccountDialog()"></i>
+                              </span>
+
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-10" style="text-align: right">
+                    <label class="control-label"> تکمیل شده به دست</label>
+                    <select class="form-control"
+                            style="width: 100%;padding: 0px" dir="rtl"
+                            class="js-example-basic-single completeWork">
+                      <option *ngFor="let item of userList" [value]="item.id">{{item.name}}-{{item.family}}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2" style="margin-top: 5vh">
+                              <span>
+                                <i class="fa fa-plus " style="color: green" (click)="showAccountDialog()"></i>
+                              </span>
+
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-10" style="text-align: right">
+                  <label class="control-label"> تخمین نفر ساعت </label>
+                  <div class="input-group input-group-sm">
+                    <input type="text" placeholder="نفر ساعت" [(ngModel)]="work.laborHour" class="form-control">
+                  </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-10" style="text-align: right">
+                  <label class="control-label"> نفر ساعت کار انجام شده </label>
+                  <div class="input-group input-group-sm">
+                    <input type="text" placeholder="نفر ساعت" [(ngModel)]="work.actualLaborHour" class="form-control">
+                  </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-10" style="text-align: right">
+                  <label class="control-label"> زمان پایان کار </label>
+                  <dp-date-picker
+                    dir="rtl"
+                    mode="day"
+                    [(ngModel)]="date1"
+                    placeholder="تاریخ"
+                    theme="dp-material">
+                  </dp-date-picker>
+                </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="tab-pane fade" id="completionWork" role="tabpanel">
+            <div class="row text-right">
+              <div class="col-md-1"></div>
+              <div class="col-md-5">
+                <div class="row">
+                  <div class="col-md-10" style="text-align: right">
+                    <label class="control-label">بودجه تخصیص یافته</label>
+                    <select class="form-control"
+                            style="width: 100%;padding: 0px" dir="rtl"
+                            class="js-example-basic-single account">
+                      <option *ngFor="let item of accountList" [value]="item.id">{{item.name}}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2" style="margin-top: 5vh">
+                     <span>
+                       <i class="fa fa-plus " style="color: green" (click)="showAccountDialog()"></i>
+                     </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="row">
+                  <div class="col-md-10" style="text-align: right">
+                    <label class="control-label">مسئول تعمیرات</label>
+                    <select class="form-control"
+                            style="width: 100%;padding: 0px" dir="rtl"
+                            class="js-example-basic-single chargeDepartment">
+                      <option *ngFor="let item of chargeDepartmentList" [value]="item.id">{{item.code}}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2" style="margin-top: 5vh">
+                    <span>
+                      <i class="fa fa-plus " style="color: green" (click)="showChargeDepartmentDialog()"></i>
+                    </span>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row text-right">
+              <div class="col col-md-1"></div>
+              <div class="col col-md-10">
+                <label class="control-label"> یادداشت ها </label>
+                <div class="input-group input-group-sm">
+                  <textarea type="text" placeholder="یادداشت" [(ngModel)]="work.note" class="form-control"></textarea>
+                </div>
+              </div>
+              <div class="col col-md-1"></div>
+
+            </div>
+            <div class="row text-right">
+              <div class="col col-md-1"></div>
+              <div class="col col-md-5">
+                <div class="row">
+                  <label class="control-label">1</label>
+                  <div class="input-group input-group-sm">
+                    <input type="text" placeholder="1" class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <label class="control-label"> 2 </label>
+                  <div class="input-group input-group-sm">
+                    <input type="text" placeholder="2" class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <label class="control-label"> 3 </label>
+                  <div class="input-group input-group-sm">
+                    <input type="text" placeholder="3" class="form-control">
+                  </div>
+                </div>
+              </div>
+              <div class="col col-md-6"></div>
+            </div>
+            <div class="row text-right">
+              <div class="col col-md-1"></div>
+              <div class="col col-md-10">
+                <label class="control-label"> یادداشت های مدیر </label>
+                <div class="input-group input-group-sm">
+                  <textarea type="text" placeholder="یادداشت" [(ngModel)]="work.adminNote" class="form-control"></textarea>
+                </div>
+              </div>
+              <div class="col col-md-1"></div>
+
+            </div>
+
+          </div>
+          <div class="tab-pane fade" id="laborTaskWork" role="tabpanel">
+            <nb-card>
+              <nb-card-body>
+                <table class="table" style="border-radius: 4px;">
+                  <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                  <tr>
+                    <td>1</td>
+                    <td>send</td>
+                    <td>send</td>
+                    <td>send</td>
+                    <td>send</td>
+                  </tr>
+                  </thead>
+                  <tbody>
+
+
+                  </tbody>
+                </table>
+              </nb-card-body>
+              <nb-card-footer>
+                <i class="fa fa-plus-circle fa-3x" (click)="showLaborTaskAddForm()">
+                </i>
+              </nb-card-footer>
+            </nb-card>
+          </div>
+          <div class="tab-pane fade" id="partsWork" role="tabpanel">
+            <nb-card>
+              <nb-card-body>
+                <table class="table" style="border-radius: 4px;">
+                  <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                  <tr>
+                    <td>ردیف</td>
+                    <td>نام قطعه</td>
+                    <td>send</td>
+                    <td>send</td>
+                    <td>حذف</td>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let item of work.workOrderParts;let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{item.part.name}}</td>
+                    <td>{{item.planedQuantity}}</td>
+                    <td>{{item.actualQuantity}}</td>
+                    <td><a class="btnRemove" (click)="deleteWoPart(item.id,i)" style="cursor: pointer;color: red">
+                      <i class="nb-trash"></i>
+                    </a></td>
+                  </tr>
+
+                  </tbody>
+                </table>
+              </nb-card-body>
+              <nb-card-footer>
+                <i class="fa fa-plus-circle fa-3x" (click)="showPartsAddForm()">
+                </i>
+              </nb-card-footer>
+            </nb-card>
+          </div>
+          <div class="tab-pane fade" id="meterReadingWork" role="tabpanel">
+            <nb-card>
+              <nb-card-body>
+                <table class="table" style="border-radius: 4px;">
+                  <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                  <tr>
+                    <td>ردیف</td>
+                    <td>عنوان</td>
+                    <td>کارکرد</td>
+                    <td>واحد</td>
+                    <td>حذف</td>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let item of work.meterReadings;let i = index">
+                    ‍  <td>{{i+1}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.amount}}</td>
+                    <td>{{item.unit.name}}</td>
+                    <td>
+                      <a class="btnRemove" (click)="deleteMetering(item.id,i)" style="cursor: pointer;color: red">
+                        <i class="nb-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </nb-card-body>
+
+              <nb-card-footer>
+                <i class="fa fa-plus-circle fa-3x" (click)="showMeteringAddForm()">
+                </i>
+              </nb-card-footer>
+            </nb-card>
+
+          </div>
+          <div class="tab-pane fade" id="scheduleMaintenance" role="tabpanel">
+            <div class="row">
+            <div class="col col-md-12">
+              <nb-card>
+                <nb-card-body>
+                  <div class="row text-right">
+                    <div class="col col-md-1"></div>
+                    <div class="col col-md-10">
+                      <label class="container">
+                        <div style="margin-right: 20px">درخواست کار براساس دوره زمانی </div>
+                        <input type="radio" name="radio"  (change)="onChange($event,'time')">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                    <div class="col col-md-1"></div>
+                  </div>
+                  <div class="row text-right">
+                    <div class="col col-md-1"></div>
+                    <div class="col col-md-10">
+                      <label class="container">
+                        <div style="margin-right: 20px">درخواست کار براساس کارکرد</div>
+                        <input type="radio" name="radio" (change)="onChange($event,'meter')">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                    <div class="col col-md-1"></div>
+                  </div>
+                  <nb-card *ngIf="timePeriod">
+                    <nb-card-body>
+                      <div class="row text-right">
+                        <div class="col-md-4" style="text-align: right">
+                          <label class="control-label">دوره زمانی</label>
+                          <select class="form-control"
+                                  style="width: 100%;padding: 0px" dir="rtl"
+                                  class="js-example-basic-single periodTime">
+                            <option *ngFor="let item of timeTypeList" [value]="item._value">{{item._title}}</option>
+                          </select>
+                        </div>
+                        <div class="col col-md-4">
+                          <label class="control-label">هر</label>
+                          <div class="input-group input-group-sm">
+                            <input type="text" placeholder="هر" [(ngModel)]="scheduleTime.per" class="form-control">
+                          </div>
+                        </div>
+                        <div class="col col-md-4">
+                          <label class="control-label">نوع دوره</label>
+                          <select class="form-control"
+                                  style="width: 100%;padding: 0px" dir="rtl"
+                                  class="js-example-basic-single periodType">
+                            <option *ngFor="let item of fixTypeList" [value]="item._value">{{item._title}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col col-md-1"></div>
+                        <div class="col col-md-5">
+                          <div class="row">
+                            <label class="control-label">شروع از</label>
+                            <dp-date-picker
+                              dir="rtl"
+                              [(ngModel)]="date2"
+                              mode="day"
+                              placeholder="تاریخ"
+                              theme="dp-material">
+                            </dp-date-picker>
+                          </div>
+                          <div class="row">
+                            <div class="demo-checkboxes" style="text-align: right!important;border: 1px solid rgb(228, 228, 228)" >
+                              <input style="cursor: pointer" id="10" type="checkbox" (change)="change1($event)">
+                              <label style="cursor: pointer" for="10">
+                                ساخت woدر تاریخ شروع
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col col-md-5">
+                          <div class="row">
+                            <label class="control-label">پایان در</label>
+                            <dp-date-picker
+                              dir="rtl"
+                              [(ngModel)]="date3"
+                              mode="day"
+                              placeholder="تاریخ"
+                              theme="dp-material">
+                            </dp-date-picker>
+                          </div>
+                        </div>
+                        <div class="col col-md-1"></div>
+                      </div>
+                    </nb-card-body>
+                  </nb-card>
+                  <nb-card *ngIf="meterPeriod">
+                    <nb-card-body>
+                      <div class="row">
+                        <div class="col col-md-4"></div>
+                        <div class="col col-md-4">
+                          <label class="control-label">نوع دوره</label>
+                          <select class="form-control"
+                                  style="width: 100%;padding: 0px" dir="rtl"
+                                  class="js-example-basic-single periodTypeMeter">
+                            <option value="meterEvery">هر</option>
+                            <option value="meterOne">فقط</option>
+                          </select>
+                        </div>
+                        <div class="col col-md-4"></div>
+                      </div>
+                      <nb-card *ngIf="meterType=='meterEvery'">
+                        <nb-card-body>
+                          <div class="row text-right">
+                            <div class="col col-md-4">
+                              <label class="control-label">هر</label>
+                              <div class="input-group input-group-sm">
+                                <input type="text" placeholder="هر" [(ngModel)]="work.meteringCycle.per" class="form-control">
+                              </div>
+                            </div>
+                            <div class="col-md-4" style="text-align: right">
+                              <label class="control-label">واحد</label>
+                              <select class="form-control"
+                                      style="width: 100%;padding: 0px" dir="rtl"
+                                      class="js-example-basic-single unitOfPeriodType">
+                                <option *ngFor="let item of unitList" [value]="item.id">{{item.name}}</option>
+                              </select>
+                            </div>
+                            <div class="col col-md-4">
+                              <label class="control-label">نوع دوره</label>
+                              <select class="form-control"
+                                      style="width: 100%;padding: 0px" dir="rtl"
+                                      class="js-example-basic-single periodTypeMetering">
+                                <option *ngFor="let item of fixTypeList" [value]="item._value">{{item._title}}</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="row text-right">
+                            <div class="col col-md-1"></div>
+                            <div class="col col-md-5">
+                              <label class="control-label">شروع از</label>
+                              <dp-date-picker
+                                dir="rtl"
+                                [(ngModel)]="date4"
+                                mode="day"
+                                placeholder="تاریخ"
+                                theme="dp-material">
+                              </dp-date-picker>
+                            </div>
+                            <div class="col col-md-5">
+                              <label class="control-label">پایان در</label>
+                              <dp-date-picker
+                                dir="rtl"
+                                [(ngModel)]="date5"
+                                mode="day"
+                                placeholder="تاریخ"
+                                theme="dp-material">
+                              </dp-date-picker>
+                            </div>
+                            <div class="col col-md-1"></div>
+                          </div>
+                        </nb-card-body>
+                      </nb-card >
+                      <nb-card *ngIf="meterType=='meterOne'">
+                        <nb-card-body>
+                          <div class="row text-right">
+                            <div class="col-md-4" style="text-align: right">
+                              <label class="control-label">واحد</label>
+                              <select class="form-control"
+                                      style="width: 100%;padding: 0px" dir="rtl"
+                                      class="js-example-basic-single unitOfPeriodType3">
+                                <option *ngFor="let item of unitList" [value]="item.id">{{item.title}}</option>
+                              </select>
+                            </div>
+                            <div class="col col-md-4">
+                              <label class="control-label">compare</label>
+                              <select class="form-control"
+                                      style="width: 100%;padding: 0px" dir="rtl"
+                                      class="js-example-basic-single compare">
+                                <option value="GREATER">بیشتر</option>
+                                <option value="SMALLER">کمتر</option>
+                              </select>
+                            </div>
+                            <div class="col col-md-4">
+                              <label class="control-label">هر</label>
+                              <div class="input-group input-group-sm">
+                                <input type="text" placeholder="هر" [(ngModel)]="scheduleMeterSingle.per" class="form-control">
+                              </div>
+                            </div>
+                          </div>
+                        </nb-card-body>
+                      </nb-card>
+                    </nb-card-body>
+                  </nb-card>
+                </nb-card-body>
+              </nb-card>
+            </div>
+            </div>
+
+          </div>
+          <div class="tab-pane fade" id="miscCostPage" role="tabpanel">
+            <nb-card>
+              <nb-card-body>
+                <table class="table" style="border-radius: 4px;">
+                  <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                  <tr>
+                    <td>ردیف</td>
+                    <td>قیمت کل</td>
+                    <td>تخمین قیمت کل</td>
+                    <td>حذف</td>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let item of work.miscCosts;let i = index">
+                    ‍<td>{{i+1}}</td>
+                    <td>{{item.actualTotalCost}}</td>
+                    <td>{{item.estimatedTotalCost}}</td>
+                    <td>
+                      <a class="btnRemove" (click)="deleteMiscCost(item.id,i)" style="cursor: pointer;color: red">
+                        <i class="nb-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </nb-card-body>
+
+              <nb-card-footer>
+                <i class="fa fa-plus-circle fa-3x" (click)="showMiscCostAddForm()">
+                </i>
+              </nb-card-footer>
+            </nb-card>
+
+          </div>
+          <div class="tab-pane fade" id="notificationWork" role="tabpanel">
+            <nb-card>
+              <nb-card-body>
+                <table class="table" style="border-radius: 4px;">
+                  <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                  <tr>
+                    <td>ردیف</td>
+                    <td>کاربر</td>
+                    <td>هشدار ها</td>
+                    <td>حذف</td>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let item of work.notifications;let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{item.user.userName}}</td>
+                    <td><div *ngFor="let x of item.events">{{x}}-</div> </td>
+                    <td>
+                      <a class="btnRemove" (click)="deleteNotify(item.id,i)" style="cursor: pointer;color: red">
+                        <i class="nb-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+
+                  </tbody>
+
+                </table>
+              </nb-card-body>
+              <nb-card-footer>
+                <i class="fa fa-plus-circle fa-3x" (click)="showNotificationAddForm()">
+                </i>
+              </nb-card-footer>
+              <!--</div>-->
+
+            </nb-card>
+
+
+          </div>
+          <div class="tab-pane fade" id="filesWork" role="tabpanel">
+            <nb-card>
+              <nb-card-body>
+                <table class="table" style="border-radius: 4px;">
+                  <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                  <tr>
+                    <td>ردیف</td>
+                    <td>نام فایل</td>
+                    <td>نوع فایل</td>
+                    <td>حذف</td>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let item of work.documents;let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.contentType}}</td>
+                    <td>
+                      <a class="btnRemove" (click)="del(item.id,i)" style="cursor: pointer;color: red">
+                        <i class="nb-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+
+                  </tbody>
+
+                </table>
+              </nb-card-body>
+              <!--</div>-->
+
+              <nb-card-footer>
+                <div style="width: 100%;
+    text-align: left;
+    margin-top: 20px;" class="text-center">
+
+                  <div class=" text-right myShadow" id="attachment">
+
+                    <div class="text-center">
+                      <label *ngIf="appdisabled===1" class=" " style="width: 180px;
+    height: 30px; margin: 5px 5px 10px 10px; text-align: center">
+                        <a class="btn btn-round btn-hero-success" style="color: white;
+    font-size: 14px;"> انتخاب فایلها
+                          <i class="fa fa-paperclip " aria-hidden="true" style="font-size: larger"></i>
+                        </a>
+                        <input type="file" style="display: none;" multiple [disabled]="appdisabled===0"
+                               (change)="onChangeUploader(input,$event)"
+                               #input>
+                      </label>
+                    </div>
+                    <div class="text-center" *ngIf="appdisabled===0">
+                      <label style="cursor: not-allowed; width: 180px;
+    height: 50px;">
+                        <a style="   color: white;
+    font-size: 11px;" class="btn btn-round btn-hero-success">
+                          <i class="fa fa-spinner fa-spin fa-3x"></i>در حال آپلود
+                        </a>
+                        <input type="file" style="display: none;" multiple [disabled]="appdisabled===0"
+                               (change)="onChangeUploader(input,$event)"
+                               #input>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </nb-card-footer>
+            </nb-card>
+
+          </div>
+          <div class="tab-pane fade" id="WorkLog" role="tabpanel">
+            <nb-card>
+              <nb-card-body>
+                <table class="table" style="border-radius: 4px;">
+                  <thead style="background-color: #f5f5f0;height: 10px;border-radius: 4px; direction: rtl">
+                  <tr>
+                    <td>1</td>
+                    <td>send</td>
+                    <td>send</td>
+                    <td>send</td>
+                    <td>send</td>
+                  </tr>
+                  </thead>
+                  <tbody>
+
+
+                  </tbody>
+
+                </table>
+              </nb-card-body>
+            </nb-card>
+
+          </div>
+        </div>
+      </div>
+  </nb-card-body>
+</nb-card>
+<app-dialog [(visible)]="laborTaskForm" [title]="'بخش افزودن تسک'" style="direction: rtl">
+  <nb-card>
+    <nb-card-header>جزییات تسک</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <label class="control-label">نوع تسک</label>
+        <select class="form-control"
+                style="width: 100%;padding: 0px" dir="rtl"
+                class="js-example-basic-single taskType">
+          <option *ngFor="let item of taskTypeList" [value]="item.id"></option>
+        </select>
+      </div>
+      <div class="row">
+        <label class="control-label">توضیحات</label>
+        <div class="input-group input-group-sm">
+          <textarea type="text" placeholder="توضیحات" class="form-control"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-10" style="text-align: right">
+          <label class="control-label"> تخصیص داده شده به</label>
+          <select class="form-control"
+                  style="width: 100%;padding: 0px" dir="rtl"
+                  class="js-example-basic-single assignTaskToUser">
+            <option *ngFor="let item of userList" [value]="item.id"></option>
+          </select>
+        </div>
+        <div class="col-md-2" style="margin-top: 5vh">
+            <span>
+              <i class="fa fa-plus " style="color: green" (click)="showAccountDialog()"></i>
+            </span>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label"> زمان آغاز کار </label>
+        <div class="input-group input-group-sm">
+          <input type="text" placeholder="" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label"> تخمین نفر ساعت </label>
+        <div class="input-group input-group-sm">
+          <input type="text" placeholder="" class="form-control">
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+  <nb-card>
+    <nb-card-header>جزییات تکمیل کار</nb-card-header>
+    <nb-card-body>
+
+      <div class="row">
+        <div class="col-md-10" style="text-align: right">
+          <label class="control-label">تکمیل کننده</label>
+          <select class="form-control"
+                  style="width: 100%;padding: 0px" dir="rtl"
+                  class="js-example-basic-single assignTaskToUserComplete">
+            <option *ngFor="let item of userList" [value]="item.id"></option>
+          </select>
+        </div>
+        <div class="col-md-2" style="margin-top: 5vh">
+            <span>
+              <i class="fa fa-plus " style="color: green" (click)="showAccountDialog()"></i>
+            </span>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label"> زمان پایان کار </label>
+        <div class="input-group input-group-sm">
+          <input type="text" placeholder="" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label"> نفر ساعت </label>
+        <div class="input-group input-group-sm">
+          <input type="text" placeholder="" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">توضیحات</label>
+        <div class="input-group input-group-sm">
+          <textarea type="text" placeholder="توضیحات" class="form-control"></textarea>
+        </div>
+      </div>
+      <div class="row text-center" style="margin-top: 5vh">
+        <div class="col col-md-12">
+        <button class="btn btn-hero-success">ثبت تسک </button>
+      </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</app-dialog>
+<app-dialog [(visible)]="WOStatusAddForm" [title]="'بخش افزودن استتوس'" style="direction: rtl">
+  <nb-card>
+    <nb-card-body>
+      <div class="row">
+        <label class="control-label"> عنوان </label>
+        <div class="input-group input-group-sm">
+          <input type="text" placeholder="عنوان" [(ngModel)]="workOrderStatus.name" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label"> استتوس </label>
+        <div class="input-group input-group-sm">
+          <input type="text" placeholder="استتوس" [(ngModel)]="workOrderStatus.status" class="form-control">
+        </div>
+      </div>
+      <div class="row text-center" style="margin-top: 5vh">
+        <div class="col col-md-12">
+        <button class="btn btn-hero-success" (click)="createWorkOrderStatus()">ثبت استتوس </button>
+      </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</app-dialog>
+<app-dialog [(visible)]="assetAddForm" [title]="'بخش افزودن دارایی'" style="direction: rtl">
+  <!--<item-add-form [target]="'workOrder'"></item-add-form>-->
+</app-dialog>
+<app-dialog [(visible)]="projectAddForm" [title]="'بخش افزودن پروژه'" style="direction: rtl">
+
+</app-dialog>
+<app-dialog [(visible)]="partsAddForm" [title]="'بخش افزودن استفاده قطعه'" style="direction: rtl">
+  <div class="row">
+    <div class="col-md-10" style="text-align: right">
+      <label class="control-label">قطعه</label>
+      <select class="form-control"
+              style="width: 100%;padding: 0px" dir="rtl"
+              class="js-example-basic-single partList">
+        <option *ngFor="let item of partList" [value]="item.id">{{item.name}}</option>
+      </select>
+    </div>
+    <div class="col-md-2" style="margin-top: 5vh">
+       <span>
+         <i class="fa fa-plus " style="color: green" (click)="showAddPartDialog()"></i>
+       </span>
+    </div>
+  </div>
+  <div class="row">
+    <label class="control-label"> موجودی حقیقی </label>
+    <div class="input-group input-group-sm">
+      <input type="text" placeholder="موجودی حقیقی" [(ngModel)]="woPart.actualQuantity" class="form-control">
+    </div>
+  </div>
+  <div class="row">
+    <label class="control-label"> planedQuantity </label>
+    <div class="input-group input-group-sm">
+      <input type="text" placeholder="موجودی برنامه ریزی شده" [(ngModel)]="woPart.planedQuantity" class="form-control">
+    </div>
+  </div>
+  <div class="row text-center" style="margin-top: 5vh">
+    <div class="col col-md-12">
+    <button class="btn-hero-success " (click)="creatWOPart()" >ثبت</button>
+  </div>
+  </div>
+</app-dialog>
+<app-dialog [(visible)]="addPartForm" [title]="'بخش افزودن قطعه'" style="direction: rtl">
+  <bom-add-form *ngIf="addPartForm" [target]="'workOrder'"></bom-add-form>
+</app-dialog>
+<app-dialog [(visible)]="meteringAdd" [title]="'بخش افزودن کارکرد'" style="direction: rtl">
+  <metering-add-form *ngIf="meteringAdd" [target]="'workOrder'"></metering-add-form>
+</app-dialog>
+<app-dialog [(visible)]="miscCostAdd" [title]="'بخش افزودن هزینه پیش بینی نشده'" style="direction: rtl">
+  <nb-card>
+    <nb-card-header>جزییات تسک</nb-card-header>
+    <nb-card-body>
+      <div class="row text-right">
+        <label class="control-label">نوع</label>
+        <select class="form-control"
+                style="width: 100%;padding: 0px" dir="rtl"
+                class="js-example-basic-single miscCostTypeList">
+          <option *ngFor="let item of miscCostTypeList" [value]="item.id">{{item.name}}</option>
+        </select>
+      </div>
+      <div class="row text-right">
+        <label class="control-label">توضیحات</label>
+        <div class="input-group input-group-sm">
+          <textarea type="text" placeholder="توضیحات" [(ngModel)]="miscCost.description" class="form-control"></textarea>
+        </div>
+      </div>
+      <div class="row text-right">
+        <div class="col col-md-3">
+          <label class="control-label"> تخمین موجودی</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="تخمین موجودی" [(ngModel)]="miscCost.estimatedQuantity" class="form-control">
+          </div>
+        </div>
+        <div class="col col-md-3">
+          <label class="control-label">تخمین قیمت واحد</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="تخمین قیمت واحد" [(ngModel)]="miscCost.estimatedUnitCost" class="form-control">
+          </div>
+        </div>
+        <div class="col col-md-3">
+          <label class="control-label">تخمین قیمت کل</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="تخمین قیمت کل" [(ngModel)]="miscCost.estimatedTotalCost" class="form-control">
+          </div>
+        </div>
+
+      </div>
+      <div class="row text-right">
+        <div class="col col-md-3">
+          <label class="control-label"> موجودی</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="موجودی" [(ngModel)]="miscCost.quantity" class="form-control">
+          </div>
+        </div>
+        <div class="col col-md-3">
+          <label class="control-label">قیمت واحد</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="قیمت واحد" [(ngModel)]="miscCost.actualUnitCost" class="form-control">
+          </div>
+        </div>
+        <div class="col col-md-3">
+          <label class="control-label"> قیمت کل</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="قیمت کل" [(ngModel)]="miscCost.actualTotalCost" class="form-control">
+          </div>
+        </div>
+
+      </div>
+      <div class="row text-center" style="margin-top: 5vh">
+        <div class="col col-md-12">
+        <button class="btn btn-hero-success" (click)="creteMiscCost()">ثبت هزینه پیش بینی نشده </button>
+      </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</app-dialog>
+<app-dialog [(visible)]="miscCostTypeAdd" [title]="'بخش افزودن نوع هزینه پیش بینی نشده'" style="direction: rtl">
+  <nb-card>
+    <nb-card-body>
+      <div class="row">
+        <label class="control-label">عنوان نوع</label>
+        <div class="input-group input-group-sm">
+          <input type="text" placeholder="نوع"[(ngModel)]="miscCostType.name"  class="form-control">
+        </div>
+      </div>
+      <div class="row text-center" style="margin-top: 5vh">
+        <div class="col col-md-12">
+        <button class="btn btn-hero-success" (click)="creteMiscCostType()">ثبت هزینه پیش بینی نشده </button>
+      </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</app-dialog>
+<app-dialog [(visible)]="notificationAdd" [title]="'بخش افزودن کارکرد'" style="direction: rtl">
+  <nb-card>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-md-10" style="text-align: right">
+          <label class="control-label">کاربر</label>
+          <select class="form-control"
+                  style="width: 100%;padding: 0px" dir="rtl"
+                  class="js-example-basic-single userListWorkOrder">
+            <option *ngFor="let item of userList" [value]="item.id"></option>
+          </select>
+        </div>
+        <div class="col-md-2" style="margin-top: 5vh">
+           <span>
+             <i class="fa fa-plus " style="color: green" (click)="showUserDialog()"></i>
+           </span>
+        </div>
+      </div>
+      <div class="row" *ngFor="let item of notifyList;let i=index">
+        <div class="demo-checkboxes" style="text-align: right!important;border: 1px solid rgb(228, 228, 228)" >
+          <input style="cursor: pointer" [id]="i" type="checkbox" [value]="item._value" (change)="checkNotify($event)">
+          <label style="cursor: pointer" [for]="i">
+            {{item._title}}
+          </label>
+        </div>
+      </div>
+      <div class="row text-center" style="margin-top: 5vh">
+        <div class="col col-md-12">
+        <button class="btn btn-hero-success" (click)="createNotify()" >ثبت نوتیفیکیشن </button>
+      </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</app-dialog>
+<app-dialog [(visible)]="userAdd" [title]="'بخش افزودن کاربر'" style="direction: rtl">
+
+</app-dialog>
+<app-dialog [(visible)]="scheduleAdd" [title]="'بخش افزودن دوره بازدید'" style="direction: rtl">
+  <nb-card>
+    <nb-card-body>
+      <div class="row">
+        <div class="col col-md-1"></div>
+        <div class="col col-md-5">
+          <label class="container">
+            <div style="margin-right: 20px">درخواست کار براساس دوره زمانی بازدید</div>
+            <input type="radio" name="radio" (change)="onChange($event)">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-md-1"></div>
+        <div class="col col-md-5">
+          <label class="container">
+            <div style="margin-right: 20px">درخواست کار براساس کارکرد</div>
+            <input type="radio" name="radio" (change)="onChange($event)">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+      </div>
+      <nb-card>
+        <nb-card-body>
+          <div class="row">
+            <div class="col-md-4" style="text-align: right">
+              <label class="control-label">دوره زمانی</label>
+              <select class="form-control"
+                      style="width: 100%;padding: 0px" dir="rtl"
+                      class="js-example-basic-single periodTime">
+                <option *ngFor="let item of timeTypeList" [value]="item.id"></option>
+              </select>
+            </div>
+            <div class="col col-md-4">
+              <label class="control-label">نوع</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="" class="form-control">
+              </div>
+            </div>
+            <div class="col col-md-4">
+              <label class="control-label">نوع دوره</label>
+              <select class="form-control"
+                      style="width: 100%;padding: 0px" dir="rtl"
+                      class="js-example-basic-single periodType">
+                <option *ngFor="let item of timeTypeList" [value]="item.id"></option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-md-1"></div>
+            <div class="col col-md-5">
+              <div class="row">
+              <label class="control-label">شروع از</label>
+              <dp-date-picker
+                dir="rtl"
+                mode="day"
+                placeholder="تاریخ"
+                theme="dp-material">
+              </dp-date-picker>
+              </div>
+              <div class="row">
+                <div class="demo-checkboxes" style="text-align: right!important;border: 1px solid rgb(228, 228, 228)" >
+                  <input style="cursor: pointer" type="checkbox" >
+                  <label style="cursor: pointer" >
+                    <!--{{item._title}}-->
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="col col-md-5">
+              <div class="row">
+                <div class="col col-md-1"></div>
+                <div class="col col-md-5">
+                  <label class="container">
+                    <div style="margin-right: 20px">پایان ناپذیر</div>
+                    <input type="radio" name="radio" (change)="onChange($event)">
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col col-md-1"></div>
+                <div class="col col-md-5">
+                  <label class="container">
+                    <div style="margin-right: 20px">پایان در</div>
+                    <input type="radio" name="radio" (change)="onChange($event)">
+                    <span class="checkmark"></span>
+                  </label>
+                  <dp-date-picker
+                    dir="rtl"
+                    mode="day"
+                    placeholder="تاریخ"
+                    theme="dp-material">
+                  </dp-date-picker>
+                </div>
+              </div>
+            </div>
+            <div class="col col-md-1"></div>
+          </div>
+
+        </nb-card-body>
+      </nb-card>
+      <nb-card>
+        <nb-card-body>
+          <div class="row">
+            <div class="col col-md-4"></div>
+            <div class="col col-md-4">
+              <label class="control-label">نوع دوره</label>
+              <select class="form-control"
+                      style="width: 100%;padding: 0px" dir="rtl"
+                      class="js-example-basic-single periodTypeMeter">
+                <option ></option>
+              </select>
+            </div>
+            <div class="col col-md-4"></div>
+          </div>
+          <nb-card>
+            <nb-card-body>
+              <div class="row">
+                <div class="col col-md-4">
+                  <label class="control-label">هر</label>
+                  <div class="input-group input-group-sm">
+                    <input type="text" placeholder="" class="form-control">
+                  </div>
+                </div>
+                <div class="col-md-4" style="text-align: right">
+                  <label class="control-label">واحد</label>
+                  <select class="form-control"
+                          style="width: 100%;padding: 0px" dir="rtl"
+                          class="js-example-basic-single unitOfPeriodType">
+                    <option *ngFor="let item of unitList" [value]="item.id"></option>
+                  </select>
+                </div>
+                <div class="col col-md-4">
+                  <label class="control-label">نوع دوره</label>
+                  <select class="form-control"
+                          style="width: 100%;padding: 0px" dir="rtl"
+                          class="js-example-basic-single periodTypeMetering">
+                    <option *ngFor="let item of timeTypeList" [value]="item.id"></option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col col-md-4">
+                  <label class="control-label">شروع در</label>
+                  <div class="input-group input-group-sm">
+                    <input type="text" placeholder="" class="form-control">
+                  </div>
+                </div>
+                <div class="col col-md-4">
+                  <div class="row">
+                    <div class="col col-md-1"></div>
+                    <div class="col col-md-5">
+                      <label class="container">
+                        <div style="margin-right: 20px">پایان ناپذیر</div>
+                        <input type="radio" name="radio" (change)="onChange($event)">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col col-md-1"></div>
+                    <div class="col col-md-5">
+                      <label class="container">
+                        <div style="margin-right: 20px">پایان در</div>
+                        <input type="radio" name="radio" (change)="onChange($event)">
+                        <span class="checkmark"></span>
+                      </label>
+                      <div class="input-group input-group-sm">
+                        <input type="text" placeholder="" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+          <nb-card>
+            <nb-card-body>
+              <div class="row">
+                <div class="col-md-4" style="text-align: right">
+                  <label class="control-label">واحد</label>
+                  <select class="form-control"
+                          style="width: 100%;padding: 0px" dir="rtl"
+                          class="js-example-basic-single unitOfPeriodType2">
+                    <option *ngFor="let item of unitList" [value]="item.id"></option>
+                  </select>
+                </div>
+                <div class="col col-md-4">
+                  <label class="control-label"></label>
+                  <select class="form-control"
+                          style="width: 100%;padding: 0px" dir="rtl"
+                          class="js-example-basic-single makeWorkOrderAt">
+                    <option *ngFor="let item of timeTypeList" [value]="item.id"></option>
+                  </select>
+                </div>
+                <div class="col col-md-4">
+                  <label class="control-label">هر</label>
+                  <div class="input-group input-group-sm">
+                    <input type="text" placeholder="" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </nb-card-body>
+      </nb-card>
+    </nb-card-body>
+  </nb-card>
+</app-dialog>
+<app-dialog [(visible)]="showAccountModal" [title]="'بخش افزودن بودجه خرید'" style="direction: rtl">
+  <div class="row" style="text-align: right">
+    <div class="col-md-6">
+      <label class="control-label">عنوان بودجه</label>
+      <div class="input-group input-group-sm">
+        <input type="text" placeholder="عنوان بودجه" [(ngModel)]="account.name" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label class="control-label"> توضیحات </label>
+      <div class="input-group input-group-sm">
+                              <textarea type="text" [(ngModel)]="account.description"
+                                        placeholder="در این بخش توضیحات در مورد بودجه تخصیص یافته را مطرح میکنید"
+                                        class="form-control"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="row text-center" style="margin-top: 5vh">
+    <div class="col col-md-12">
+    <button class="btn btn-hero-success" (click)="createAccount()">ثبت بودجه</button>
+  </div>
+  </div>
+</app-dialog>
+<app-dialog [(visible)]="showChargeDepartmentModal" [title]="'بخش افزودن مسئول تعمیرات و نگهداری'"
+            style="direction: rtl">
+  <div class="row" style="text-align: right">
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <label class="control-label">کد بخش</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="کد بخش" [(ngModel)]="chargeDepartment.code" class="form-control">
+          </div>
+        </div>
+        <div class="col-md-12">
+          <label class="control-label"> توضیحات </label>
+          <div class="input-group input-group-sm">
+                              <textarea type="text" [(ngModel)]="chargeDepartment.description"
+                                        placeholder="در این بخش توضیحات در مورد بخش مسئول تعمیرات و نگهداری را مطرح میکنید"
+                                        class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row" style="margin-top: 0vh!important;">
+            <div class="col-md-10" style="text-align: right">
+              <label class="control-label">مسئول تعمیرات</label>
+              <select class="form-control"
+                      style="width: 100%;padding: 0px" dir="rtl"
+                      class="js-example-basic-single chargeDepartmentLocation">
+                <option *ngFor="let item of assetListChargeDepartment" [value]="item.id">{{item.name}}</option>
+              </select>
+            </div>
+            <div class="col-md-2" style="margin-top: 5vh">
+               <span>
+                 <i class="fa fa-plus " style="color: green"></i>
+               </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-3">
+
+    </div>
+  </div>
+  <div class="row text-center" style="margin-top: 5vh">
+    <div class="col col-md-12">
+    <button class="btn btn-hero-success" (click)="createChargeDepartment()">ثبت مسئول تعمیرات</button>
+  </div>
+  </div>
+</app-dialog>

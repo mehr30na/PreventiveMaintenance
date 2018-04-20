@@ -1,0 +1,281 @@
+<nb-card *ngIf="mode==''">
+  <nb-card-header>
+    <div class="row">
+      <div class="col-md-4" style="text-align: right">
+        <button class="btn btn-hero-success" style="margin: 4px;" (click)="add()">افزودن سازمان</button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">لیست سازمان ها</div>
+      <div class="col-md-4"></div>
+    </div>
+  </nb-card-header>
+
+
+  <nb-card-body style="direction: rtl!important;">
+    <div class="row" style="padding-top: 5vh!important;">
+      <div class="col-md-6">
+
+        <!--<form [formGroup]="form">-->
+        <div class="col col-md-12">
+          <select class="form-control" style="width: 100%;padding: 0px" dir="rtl" name="province" [(ngModel)]="organ.province.id" class="js-example-basic-single js-example-basic-single-OrganizationProvince">
+            <option value="main" disabled="disabled">لطفا استان مورد نظر را انتخاب کنید
+            </option>
+            <option *ngFor="let item of provinceList" [value]="item.id">{{item.name}}</option>
+          </select>
+          <!--<p style="color: red"-->
+          <!--*ngIf="!form.controls['province'].valid && (form.controls['province'].touched ||saveButton)">-->
+          <!--انتخاب کردن استان الزامی است-->
+          <!--</p>-->
+        </div>
+        <div class="col col-md-12">
+          <select class="form-control" style="width: 100%;padding: 0px" dir="rtl" name="city" [(ngModel)]="organ.city.id" class="js-example-basic-single js-example-basic-single-OrganizationCity">
+            <option value="main" disabled="disabled">لطفا شهر مورد نظر را انتخاب کنید
+            </option>
+            <option *ngFor="let item of cityList" [value]="item.id">{{item.name}}</option>
+          </select>
+          <!--<p style="color: red"-->
+          <!--*ngIf="!form.controls['city'].valid && (form.controls['city'].touched ||saveButton)">-->
+          <!--انتخاب کردن شهر الزامی است-->
+          <!--</p>-->
+        </div>
+        <div class="col col-md-12">
+          <select name="parentId" id="paren" class="form-control" class="js-example-basic-single js-example-basic-single-OrganizationFormOrganizationParentList"
+            style="width: 100%;padding: 0px" dir="rtl" [(ngModel)]="organ.parentOrgan.id">
+            <option value="main" disabled="disabled">لطفا سازمان مورد نظر را انتخاب کنید
+            </option>
+            <option value="0">سازمان اصلی</option>
+            <option *ngFor="let item of organListSelect" [value]="item.id">
+              <b>{{item.name}}</b>
+            </option>
+          </select>
+          <!--<p style="color: red"-->
+          <!--*ngIf="!form.controls['parentOrgan'].valid && (form.controls['parentOrgan'].touched ||saveButton)">-->
+          <!--انتخاب کردن سازمان الزامی است-->
+          <!--</p>-->
+        </div>
+        <!--</form>-->
+
+
+        <table class="table table-striped table-bordered table-hover table-responsive" style="margin-top: 5vh!important;width:100%!important; ">
+          <thead>
+            <tr>
+              <th class="text-center" style="width: 4%">ردیف</th>
+              <th class="text-center" style="width: 44%">نام سازمان</th>
+              <th class="text-center" style="width: 44%"> کد سازمان</th>
+              <th class="text-center" style="width: 4%">ویرایش</th>
+              <th class="text-center" style="width: 4%">حذف</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr *ngFor="let item of organList;let i =index">
+              <td class="text-center">{{i+1}}</td>
+              <td class="text-center">{{item.name}}</td>
+              <td class="text-center">{{item.organCode}}</td>
+              <td class="text-center">
+                <a (click)="editOrgan(item.id)" style="cursor: pointer;color: green">
+                  <i class="nb-edit"></i>
+                </a>
+              </td>
+              <td class="text-center">
+                <a class="btnRemove" (click)="deleteOrgan(item.id,i)" style="cursor: pointer;color: red">
+                  <i class="nb-trash"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-md-6">
+        <agm-map [latitude]="organ.city.location.lat" [longitude]="organ.city.location.lng" [scrollwheel]="false" [zoom]="12">
+          <agm-marker *ngFor="let item of organList" [latitude]="item.organLocation.lat" [longitude]="item.organLocation.lng"></agm-marker>
+        </agm-map>
+      </div>
+    </div>
+
+  </nb-card-body>
+  <nb-card-footer>
+
+  </nb-card-footer>
+</nb-card>
+<nb-card *ngIf="(mode=='add') || (mode=='edit')">
+  <nb-card-header>
+    <div class="row" *ngIf="mode=='add'">
+      <div class="col-md-4" style="text-align: right">
+        <button class="btn btn-hero-danger" style="margin: 4px;" (click)="cancel()">
+          انصراف
+        </button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">اضافه کردن سازمان</div>
+      <div class="col-md-4 pull-left">
+
+      </div>
+      <!--<div class="col-md-4"><a class="pull-right" routerLink="/management/userManagement/listRole">لیست نقش</a></div>-->
+    </div>
+
+    <div class="row" *ngIf="mode=='edit'">
+      <div class="col-md-4" style="text-align: right">
+        <button class="btn btn-hero-danger" style="margin: 4px; " (click)="cancel()">
+          انصراف
+        </button>
+      </div>
+      <div class="col-md-4" style="text-align: center;">ویرایش کردن سازمان</div>
+      <div class="col-md-4 pull-left">
+
+      </div>
+      <!--<div class="col-md-4"><a class="pull-right" routerLink="/management/userManagement/listRole">لیست نقش</a></div>-->
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div *ngIf="mode=='add'">
+      <form [formGroup]="addForm">
+        <div class="row" style="margin-top: 5vh!important;">
+          <div class="col-md-6">
+            <div class="col-md-12">
+              <select class="form-control" [(ngModel)]="organ.province.id" style="width: 100%;padding: 0px" dir="rtl" name="addProvince"
+                formControlName="addProvince" class="js-example-basic-single js-example-basic-single-OrganizationFormProvince">
+                <option value="main" disabled="disabled">لطفا استان مورد نظر را انتخاب کنید
+                </option>
+                <option *ngFor="let item of provinceList" [value]="item.id">{{item.name}}</option>
+              </select>
+              <p style="color: red" *ngIf="!addForm.controls['addProvince'].valid && (addForm.controls['addProvince'].touched ||saveButton)">
+                انتخاب کردن استان الزامی است
+              </p>
+            </div>
+            <div class="col-md-12">
+              <select class="form-control" [(ngModel)]="organ.city.id" style="width: 100%;padding: 0px" dir="rtl" name="addCity" formControlName="addCity"
+                class="js-example-basic-single js-example-basic-single-OrganizationFormCity">
+                <option value="main" disabled="disabled">لطفا شهر مورد نظر را انتخاب کنید
+                </option>
+                <option *ngFor="let item of cityList" [value]="item.id">{{item.name}}</option>
+              </select>
+              <p style="color: red" *ngIf="!addForm.controls['addCity'].valid && (addForm.controls['addCity'].touched ||saveButton)">
+                انتخاب کردن شهر الزامی است
+              </p>
+            </div>
+
+            <div class="col-md-12">
+              <select name="parentId" id="parentId1" class="form-control" name="parentOrgan" formControlName="parentOrgan" class="js-example-basic-single js-example-basic-single-OrganizationFormOrganizationParent"
+                style="width: 100%;padding: 0px" dir="rtl" [(ngModel)]="organ.parentOrgan.id">
+                <option value="main" disabled="disabled">لطفا سازمان مورد نظر را انتخاب کنید
+                </option>
+                <option value="0">سازمان اصلی</option>
+                <option *ngFor="let item of organListSelect" [value]="item.id">
+                  <b>{{item.name}}</b>
+                </option>
+              </select>
+              <p style="color: red" *ngIf="!addForm.controls['addCity'].valid && (addForm.controls['addCity'].touched ||saveButton)">
+                انتخاب کردن نوع سازمان الزامی است
+              </p>
+            </div>
+
+            <div class="col-md-12 text-center">
+              <label class="control-label">نام سازمان </label>
+              <div class="input-group  input-group-sm">
+                <input type="text" placeholder="نام سازمان" class="form-control" [(ngModel)]="organ.name" name="organName" formControlName="organName">
+                <p style="color: red" *ngIf="!addForm.controls['organName'].valid && (addForm.controls['organName'].touched ||saveButton)">
+                  وارد کردن نام سازمان الزامی است
+                </p>
+              </div>
+            </div>
+            <div class="col-md-12 text-center">
+              <label class="control-label">کد سازمان </label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="کد سازمان" (change)="checkOrganCode()" class="form-control" [(ngModel)]="organ.organCode"
+                  name="organCode" formControlName="organCode">
+                <p style="color: red" *ngIf="!addForm.controls['organCode'].valid && (addForm.controls['organCode'].touched ||saveButton)">
+                  وارد کردن کد سازمان الزامی است
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <agm-map [latitude]="organ.city.location.lat" [longitude]="organ.city.location.lng" (mapClick)="mapClicked($event)" [scrollwheel]="false"
+              [zoom]="12" style="margin-top: 5vh!important;">
+              <agm-marker [latitude]="organ.organLocation.lat" [longitude]="organ.organLocation.lng"></agm-marker>
+            </agm-map>
+          </div>
+        </div>
+      </form>
+    </div>
+
+
+
+    <div *ngIf="mode=='edit'">
+      <form [formGroup]="editForm">
+        <div class="row" style="margin-top: 5vh!important;">
+
+          <div class="col-md-6">
+            <div class="col-md-12">
+              <select class="form-control" [(ngModel)]="organEdit.city.province.id" style="width: 100%;padding: 0px" dir="rtl" name="editProvince"
+                formControlName="editProvince" class="js-example-basic-single js-example-basic-single-OrganizationFormProvinceEdit">
+                <option *ngFor="let item of provinceList" [value]="item.id">{{item.name}}</option>
+              </select>
+              <p style="color: red" *ngIf="!editForm.controls['editProvince'].valid && (editForm.controls['editProvince'].touched ||saveButton2)">
+                انتخاب کردن استان الزامی است
+              </p>
+            </div>
+            <div class="col-md-12">
+              <select class="form-control" [(ngModel)]="organEdit.city.id" style="width: 100%;padding: 0px" dir="rtl" name="editCity" formControlName="editCity"
+                class="js-example-basic-single js-example-basic-single-OrganizationFormCityEdit">
+                <option *ngFor="let item of cityList" [value]="item.id">{{item.name}}</option>
+              </select>
+              <p style="color: red" *ngIf="!editForm.controls['editCity'].valid && (editForm.controls['editCity'].touched ||saveButton2)">
+                انتخاب کردن شهر الزامی است
+              </p>
+            </div>
+            <div class="col-md-12">
+              <select name="parentIdEdit" id="parentIdEdit" style="width: 100%;padding: 0px" dir="rtl" formControlName="parentIdEdit" class="form-control"
+                [(ngModel)]="organEdit.parentOrgan.id" class="js-example-basic-single js-example-basic-single-OrganizationFormOrganizationParentEdit">
+                <option value="main" disabled="disabled">لطفا سازمان مورد نظر را انتخاب کنید
+                </option>
+                <option value="0">سازمان اصلی</option>
+                <option *ngFor="let item of organListSelect" [value]="item.id">
+                  <b>{{item.name}}</b>
+                </option>
+              </select>
+              <p style="color: red" *ngIf="!editForm.controls['parentIdEdit'].valid && (editForm.controls['parentIdEdit'].touched ||saveButton2)">
+                انتخاب کردن نوع سازمان الزامی است
+              </p>
+            </div>
+            <div class="col-md-12 text-center">
+              <label class="control-label">نام سازمان</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="نام سازمان" class="form-control" [(ngModel)]="organEdit.name" name="editOrganName" formControlName="editOrganName">
+                <p style="color: red" *ngIf="!editForm.controls['editOrganName'].valid && (editForm.controls['editOrganName'].touched ||saveButton2)">
+                  وارد کردن نام سازمان الزامی است
+                </p>
+              </div>
+            </div>
+            <div class="col-md-12 text-center">
+              <label class="control-label">کد سازمان </label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="کد سازمان" class="form-control" name="editCode" formControlName="editCode" [(ngModel)]="organEdit.organCode"
+                  (change)="checkOrganCodeEdit()">
+                <p style="color: red" *ngIf="!editForm.controls['editCode'].valid && (editForm.controls['editCode'].touched ||saveButton2)">
+                  وارد کردن کد سازمان الزامی است
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <agm-map [latitude]="organEdit.city.location.lat" [longitude]="organEdit.city.location.lng" (mapClick)="mapClickedEdit($event)"
+              [scrollwheel]="false" [zoom]="12">
+              <agm-marker [latitude]="organEdit.organLocation.lat" [longitude]="organEdit.organLocation.lng"></agm-marker>
+            </agm-map>
+          </div>
+        </div>
+      </form>
+    </div>
+
+
+  </nb-card-body>
+  <nb-card-footer>
+    <div style="text-align: center!important;" *ngIf="mode=='add'">
+      <button type="submit" class="btn btn-primary" (click)="addOrgan()">ثبت</button>
+    </div>
+    <div style="text-align: center!important;" *ngIf="mode=='edit'">
+      <button type="submit" class="btn btn-primary" (click)="updateOrgan()">ویرایش</button>
+    </div>
+  </nb-card-footer>
+</nb-card>

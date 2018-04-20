@@ -1,0 +1,97 @@
+<nb-card>
+  <nb-card-header>
+    <div class="row" *ngIf="mode=='add'">
+      <div class="col-md-4"></div>
+      <div class="col-md-4" style="text-align: center;">اضافه کردن نقش</div>
+      <!--<div class="col-md-4"><a class="pull-right" routerLink="/management/userManagement/listRole">لیست نقش</a></div>-->
+    </div>
+
+    <div class="row" *ngIf="mode=='edit'">
+      <div class="col-md-4"></div>
+      <div class="col-md-4" style="text-align: center;">ویرایش کردن نقش</div>
+      <!--<div class="col-md-4"><a class="pull-right" routerLink="/management/userManagement/listRole">لیست نقش</a></div>-->
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div *ngIf="mode=='add'">
+      <div class="row">
+
+        <div class="col-md-5">
+          <div class="input-group">
+            <input type="text" placeholder="عنوان نقش" class="form-control" [(ngModel)]="userType.name">
+          </div>
+        </div>
+        <div class="col-md-2"></div>
+
+
+        <div class="col-md-5">
+          <div class="form-group">
+            <label>نقش</label>
+            <select class="form-control" (change)="setRoleAccess($event.target.value)">
+              <option *ngFor="let item of roleList" value="{{item._value}}">{{item._title}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div style="text-align: center!important;">
+        لیست دسترسی ها
+      </div>
+      <br/>
+      <br/>
+      <div class="row">
+        <div class="demo-checkboxes col-md-4" style="text-align: left!important;"
+             *ngFor="let item of roleAccessList">
+          <nb-checkbox (change)="check(item,$event)">{{item._title}}</nb-checkbox>
+        </div>
+        <br>
+      </div>
+
+
+    </div>
+    <div *ngIf="mode=='edit'">
+      <div class="row">
+
+        <div class="col-md-5">
+          <div class="input-group">
+            <input type="text" placeholder="عنوان نقش" class="form-control" [(ngModel)]="userType.name">
+          </div>
+        </div>
+        <div class="col-md-2"></div>
+
+
+        <div class="col-md-5">
+          <div class="form-group">
+            <select class="form-control" (change)="setRoleAccess($event.target.value)">
+              <option *ngFor="let item of roleList" value="{{item._value}}">{{item._title}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div style="text-align: center!important;">
+        لیست دسترسی ها
+      </div>
+      <br/>
+      <br/>
+      <div class="row">
+        <div class="demo-checkboxes col-md-4" style="text-align: left!important;"
+             *ngFor="let item of roleAccessList">
+          <nb-checkbox (change)="check(item,$event)">{{item._title}}</nb-checkbox>
+        </div>
+        <br>
+      </div>
+
+    </div>
+
+
+  </nb-card-body>
+  <nb-card-footer>
+    <div style="text-align: center!important;" *ngIf="mode=='add'">
+      <button type="submit" class="btn btn-primary" (click)="addRole()">ثبت</button>
+    </div>
+    <div style="text-align: center!important;" *ngIf="mode=='edit'">
+      <button type="submit" class="btn btn-primary" (click)="editRole()">ویرایش</button>
+    </div>
+  </nb-card-footer>
+</nb-card>

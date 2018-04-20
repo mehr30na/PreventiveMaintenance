@@ -1,0 +1,16 @@
+<!--<button class="btn-warning"><span class="glyphicon glyphicon-picture">&nbsp; تصویر</span></button>-->
+
+<div class="row">
+  <div class="col-lg-12">
+    <input id="custom-input" type="file" (change)="fileChangeListener($event)">
+    <img *ngIf="!select" src="./assets/images/selectedImage.jpg" width="300" height="200">
+    <img *ngIf="select" [hidden]="setImage" src="./assets/images/notValidImageFormat.jpg" width="300" height="200">
+    <img-cropper *ngIf="select" [hidden]="!setImage" #cropper [image]="data" [settings]="cropperSettings"
+                 (onCrop)="cropped($event)"></img-cropper>
+  </div>
+  <div class="col-lg-7" *ngIf="data.image && 0">
+  <span class="result rounded">
+    <img [src]="data.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
+  </span>
+  </div>
+</div>

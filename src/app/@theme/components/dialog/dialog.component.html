@@ -1,0 +1,16 @@
+<div [@dialog] *ngIf="visible" class="dialog" style="margin-top: 40px">
+  <button *ngIf="closable" (click)="close()" aria-label="Close" class="dialog__close-btn pull-right">X</button>
+  <div class="row text-center">
+    <div class="col-md-1"></div>
+    <div class="col-md-10 text-center">
+      <h3>{{title}}</h3>
+    </div>
+    <div class="col-md-1"></div>
+
+  </div>
+  <hr>
+  <div style="padding-left: 20px!important;padding-right: 20px!important;">
+    <ng-content></ng-content>
+  </div>
+</div>
+<div *ngIf="visible" class="overlay" (click)="close()"></div>
